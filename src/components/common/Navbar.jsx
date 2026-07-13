@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Code2, Menu, Moon, Sparkles, Sun, X } from "lucide-react";
+import { Menu, Moon, Sparkles, Sun, X } from "lucide-react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
@@ -38,7 +38,7 @@ const Navbar = ({ isGray }) => {
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <span
+          {/* <span
             className={`flex h-9 w-9 items-center justify-center rounded-xl shadow-lg ${
               isGray
                 ? "bg-gradient-to-br from-cyan-500 to-violet-600"
@@ -53,7 +53,8 @@ const Navbar = ({ isGray }) => {
             }`}
           >
             React<span className="text-violet-500">All</span>Features
-          </span>
+          </span> */}
+          <img src={isGray ? "/logoDark.png" : "/logoLight.png"} className="h-10"/>
         </Link>
 
         {/* Desktop links */}
