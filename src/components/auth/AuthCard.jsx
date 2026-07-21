@@ -1,19 +1,21 @@
-import  { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
-  Mail,
-  Lock,
-  User,
+  CheckCircle2,
   Eye,
   EyeOff,
-  LogIn,
-  UserPlus,
-  Loader2,
-  CheckCircle2,
-  ShieldCheck,
-  Zap,
   Gem,
+  Loader2,
+  Lock,
+  LogIn,
+  Mail,
+  ShieldCheck,
+  User,
+  UserPlus,
+  Zap,
 } from "lucide-react";
+import { useState } from "react";
+import api from "../../utilities/axiosInstance";
+import CountdownTimer from "../common/CountdownTimer";
 
 // Google doesn't ship a lucide icon, so here's the standard 4-color "G" mark
 // (the same asset Google's own branding guidelines use for sign-in buttons).
@@ -36,20 +38,19 @@ const benefits = [
  * Small reusable input with a leading icon and optional trailing element
  * (used here for the show/hide password toggle).
  */
-const InputField = ({ icon: Icon, isGray, trailing, ...props }) => (
+const InputField = ({ icon: Icon, isGray, trailing, maxLength = 30, ...props }) => (
   <div
-    className={`flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 transition-colors ${
-      isGray
-        ? "border-slate-700 bg-slate-950 focus-within:border-cyan-600"
-        : "border-slate-200 bg-slate-50 focus-within:border-indigo-400"
-    }`}
+    className={`flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 transition-colors ${isGray
+      ? "border-slate-700 bg-slate-950 focus-within:border-cyan-600"
+      : "border-slate-200 bg-slate-50 focus-within:border-indigo-400"
+      }`}
   >
     <Icon size={16} className={isGray ? "text-slate-500" : "text-slate-400"} />
     <input
       {...props}
-      className={`w-full bg-transparent text-sm outline-none ${
-        isGray ? "text-slate-100 placeholder:text-slate-500" : "text-slate-900 placeholder:text-slate-400"
-      }`}
+      maxLength={maxLength}
+      className={`w-full bg-transparent text-sm outline-none ${isGray ? "text-slate-100 placeholder:text-slate-500" : "text-slate-900 placeholder:text-slate-400"
+        }`}
     />
     {trailing}
   </div>
@@ -61,10 +62,23 @@ const AuthCard = ({ isGray }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [otpStep, setOtpStep] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpMessage, setOtpMessage] = useState("");
+  const [otpError, setOtpError] = useState(false);
+  const [otpTimerStart, setOtpTimerStart] = useState(null);
+
+  const resetOtpState = () => {
+    setOtpStep(false);
+    setOtp("");
+    setOtpMessage("");
+    setOtpError(false);
+  };
 
   const switchMode = (next) => {
     setMode(next);
     setSuccess(false);
+    resetOtpState();
   };
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -80,9 +94,81 @@ const AuthCard = ({ isGray }) => {
     }, 1100);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    fakeSubmit();
+    try {
+
+      if (mode === "login") {
+        fakeSubmit();
+        return;
+      }
+
+      if (!otpStep) {
+        setLoading(true);
+        setSuccess(false);
+        setOtpError(false);
+
+        const res = await api.post("/auth/register", form);
+        if (res.data.success) {
+          alert(res.data.message);
+          setLoading(false);
+          setOtpStep(true);
+          setOtpMessage(res.data.message);
+          setOtpTimerStart(Date.now());
+        } else {
+          alert(res.data.message);
+        }
+        // setTimeout(() => {
+        //   const nextOtp = generateOtp();
+        //   setLoading(false);
+        //   setOtpStep(true);
+        //   setOtp("");
+        //   setOtpMessage(`We sent a 6-digit code to ${form.email || "your email"}. Demo code: ${nextOtp}`);
+        // }, 1100);
+        return;
+      }
+
+      if (!otp.trim()) {
+        setOtpError(true);
+        return;
+      }
+
+      setLoading(true);
+      setOtpTimerStart(null);
+      const res = await api.post("/auth/verify-otp", { email: form.email, otp: otp });
+      if (res.data.success) {
+        alert("You have successfully registered!");
+        setOtpStep(false);
+        setOtp("");
+        setOtpMessage("");
+        setForm({ name: "", email: "", password: "" });
+      }
+
+    } catch (error) {
+      console.error("Error during form submission:", error);
+      alert(error.response?.data?.message || "An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resendOtp = async () => {
+    try {
+      setLoading(true);
+      setOtpError(false);
+      setOtp("");
+      setOtpTimerStart(null);
+      const res = await api.post("/auth/resend-otp", { email: form.email });
+      if (res.data.success) {
+        alert(res.data.message);
+        setOtpTimerStart(Date.now());
+      }
+    } catch (error) {
+      console.error("Error resending OTP:", error);
+      alert(error.response?.data?.message || "An error occurred while resending OTP. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const accentGradient = isGray
@@ -91,17 +177,15 @@ const AuthCard = ({ isGray }) => {
 
   return (
     <div
-      className={`grid overflow-hidden rounded-3xl border shadow-xl lg:grid-cols-2 ${
-        isGray ? "border-slate-800 shadow-black/30" : "border-slate-200 shadow-slate-200/60"
-      }`}
+      className={`grid overflow-hidden rounded-3xl border shadow-xl lg:grid-cols-2 ${isGray ? "border-slate-800 shadow-black/30" : "border-slate-200 shadow-slate-200/60"
+        }`}
     >
       {/* left branding panel — desktop only */}
       <div
-        className={`relative hidden flex-col justify-between overflow-hidden p-8 lg:flex ${
-          isGray
-            ? "bg-gradient-to-br from-slate-900 via-slate-950 to-violet-950"
-            : "bg-gradient-to-br from-indigo-600 via-fuchsia-600 to-rose-500"
-        }`}
+        className={`relative hidden flex-col justify-between overflow-hidden p-8 lg:flex ${isGray
+          ? "bg-gradient-to-br from-slate-900 via-slate-950 to-violet-950"
+          : "bg-gradient-to-br from-indigo-600 via-fuchsia-600 to-rose-500"
+          }`}
       >
         <div className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-white/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-16 -left-10 h-44 w-44 rounded-full bg-white/10 blur-3xl" />
@@ -139,9 +223,8 @@ const AuthCard = ({ isGray }) => {
       <div className={`p-6 sm:p-8 ${isGray ? "bg-slate-900" : "bg-white"}`}>
         {/* segmented Login / Signup toggle */}
         <div
-          className={`relative grid grid-cols-2 rounded-full p-1 ${
-            isGray ? "bg-slate-950" : "bg-slate-100"
-          }`}
+          className={`relative grid grid-cols-2 rounded-full p-1 ${isGray ? "bg-slate-950" : "bg-slate-100"
+            }`}
         >
           <motion.div
             className={`absolute inset-y-1 left-1 w-[calc(50%-4px)] rounded-full ${accentGradient}`}
@@ -150,17 +233,15 @@ const AuthCard = ({ isGray }) => {
           />
           <button
             onClick={() => switchMode("login")}
-            className={`relative z-10 rounded-full py-2 text-sm font-semibold transition-colors ${
-              mode === "login" ? "text-white" : isGray ? "text-slate-400" : "text-slate-500"
-            }`}
+            className={`relative z-10 rounded-full py-2 text-sm font-semibold transition-colors ${mode === "login" ? "text-white" : isGray ? "text-slate-400" : "text-slate-500"
+              }`}
           >
             Log In
           </button>
           <button
             onClick={() => switchMode("signup")}
-            className={`relative z-10 rounded-full py-2 text-sm font-semibold transition-colors ${
-              mode === "signup" ? "text-white" : isGray ? "text-slate-400" : "text-slate-500"
-            }`}
+            className={`relative z-10 rounded-full py-2 text-sm font-semibold transition-colors ${mode === "signup" ? "text-white" : isGray ? "text-slate-400" : "text-slate-500"
+              }`}
           >
             Sign Up
           </button>
@@ -182,6 +263,7 @@ const AuthCard = ({ isGray }) => {
                 icon={User}
                 isGray={isGray}
                 name="name"
+                maxLength={40}
                 placeholder="Full name"
                 value={form.name}
                 onChange={handleChange}
@@ -194,6 +276,7 @@ const AuthCard = ({ isGray }) => {
               isGray={isGray}
               type="email"
               name="email"
+              maxLength={40}
               placeholder="you@example.com"
               value={form.email}
               onChange={handleChange}
@@ -206,6 +289,7 @@ const AuthCard = ({ isGray }) => {
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Password"
+              maxLength={10}
               value={form.password}
               onChange={handleChange}
               required
@@ -220,6 +304,51 @@ const AuthCard = ({ isGray }) => {
                 </button>
               }
             />
+
+            <CountdownTimer
+              startTime={otpTimerStart}
+              duration={10 * 60 * 1000} // 10 minutes
+            />
+
+            {mode === "signup" && otpStep && (
+              <div className="space-y-2.5">
+                <InputField
+                  icon={ShieldCheck}
+                  isGray={isGray}
+                  type="text"
+                  name="otp"
+                  maxLength={6}
+                  placeholder="Enter OTP"
+                  value={otp}
+                  onChange={(e) => {
+                    setOtp(e.target.value.replace(/\D/g, "").slice(0, 6));
+                    setOtpError(false);
+                  }}
+                  required
+                  maxLength={6}
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                />
+
+                {otpMessage && (
+                  <p className={`text-xs ${isGray ? "text-slate-400" : "text-slate-500"}`}>
+                    {otpMessage}
+                  </p>
+                )}
+
+                {otpError && (
+                  <p className="text-xs text-rose-500">That code didn’t match. Please try again.</p>
+                )}
+
+              {!otpTimerStart &&  <button
+                  type="button"
+                  onClick={resendOtp}
+                  className={`text-xs font-medium underline-offset-2 hover:underline ${isGray ? "text-cyan-400" : "text-indigo-600"}`}
+                >
+                  Resend code
+                </button>}
+              </div>
+            )}
 
             {mode === "login" && (
               <div className="flex items-center justify-between pt-1 text-xs">
@@ -249,6 +378,10 @@ const AuthCard = ({ isGray }) => {
               ) : mode === "login" ? (
                 <>
                   <LogIn size={16} /> Log In
+                </>
+              ) : otpStep ? (
+                <>
+                  <ShieldCheck size={16} /> Verify OTP
                 </>
               ) : (
                 <>
@@ -288,11 +421,10 @@ const AuthCard = ({ isGray }) => {
               type="button"
               onClick={fakeSubmit}
               disabled={loading}
-              className={`flex w-full items-center justify-center gap-2.5 rounded-full border py-2.5 text-sm font-medium transition-colors disabled:opacity-70 ${
-                isGray
-                  ? "border-slate-700 text-slate-200 hover:bg-slate-800"
-                  : "border-slate-200 text-slate-700 hover:bg-slate-50"
-              }`}
+              className={`flex w-full items-center justify-center gap-2.5 rounded-full border py-2.5 text-sm font-medium transition-colors disabled:opacity-70 ${isGray
+                ? "border-slate-700 text-slate-200 hover:bg-slate-800"
+                : "border-slate-200 text-slate-700 hover:bg-slate-50"
+                }`}
             >
               <GoogleIcon />
               Continue with Google
