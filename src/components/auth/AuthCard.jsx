@@ -1,3 +1,4 @@
+import { useGoogleLogin } from "@react-oauth/google";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   CheckCircle2,
@@ -65,6 +66,7 @@ const AuthCard = ({ isGray }) => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [otpStep, setOtpStep] = useState(false);
   const [otp, setOtp] = useState("");
@@ -136,6 +138,36 @@ const AuthCard = ({ isGray }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        setGoogleLoading(true);
+        const res = await api.post("/auth/google", {
+          token: tokenResponse.access_token,
+        });
+
+        if (res.data.success) {
+          setToast({ type: "success", message: res.data.message || "Signed in with Google", position: "top-center" });
+          setSuccess(true);
+          dispatch(setUserData(res.data.user));
+          navigate("/");
+          setForm({ name: "", email: "", password: "" });
+          return;
+        }
+
+        setToast({ type: "error", message: res.data.message || "Unable to sign in with Google.", position: "top-center" });
+      } catch (error) {
+        console.error("Google sign-in failed:", error);
+        setToast({ type: "error", message: error.response?.data?.message || "Google sign-in failed. Please try again.", position: "top-center" });
+      } finally {
+        setGoogleLoading(false);
+      }
+    },
+    onError: () => {
+      setToast({ type: "error", message: "Google sign-in was cancelled or failed.", position: "top-center" });
+    },
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -469,15 +501,15 @@ const AuthCard = ({ isGray }) => {
 
             <button
               type="button"
-              onClick={() => { }}
-              disabled={loading}
+              onClick={() => googleLogin()}
+              disabled={loading || googleLoading}
               className={`flex w-full items-center justify-center gap-2.5 rounded-full border py-2.5 text-sm font-medium transition-colors disabled:opacity-70 ${isGray
                 ? "border-slate-700 text-slate-200 hover:bg-slate-800"
                 : "border-slate-200 text-slate-700 hover:bg-slate-50"
                 }`}
             >
               <GoogleIcon />
-              Continue with Google
+              {googleLoading ? "Signing in with Google..." : "Continue with Google"}
             </button>
 
             <p className={`pt-1 text-center text-xs ${isGray ? "text-slate-500" : "text-slate-400"}`}>

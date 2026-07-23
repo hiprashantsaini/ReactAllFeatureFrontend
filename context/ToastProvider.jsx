@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import { createContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import api from "../src/utilities/axiosInstance";
@@ -160,6 +161,15 @@ const toastStyles = {
                                 {toast.message}
                             </p>
                         </div>
+
+                        <button
+                            type="button"
+                            onClick={() => {setVisible(false);setToast(null);}}
+                            className={`ml-2 cursor-pointer rounded-full h-6 w-6 flex items-center justify-center text-sm font-semibold transition border hover:bg-white/15 ${isGray ? 'text-gray-100' : 'text-slate-900'}`}
+                            aria-label="Close notification"
+                        >
+                            <X className="h-4 w-4" />
+                        </button>
                     </div>
                 )}
             </div>
