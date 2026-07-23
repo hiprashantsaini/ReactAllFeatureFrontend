@@ -1,5 +1,6 @@
 import { Provider } from 'react-redux'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import ToastProvider from '../context/ToastProvider.jsx'
 import AuthPage from './pages/auth/AuthPage.jsx'
 import AccordionOrFaqPage from './pages/features/ui/FAQPage.jsx'
 import ImageCarouselPage from './pages/features/ui/ImageCarouselPage'
@@ -11,6 +12,7 @@ import HomePage from './pages/home/HomePage'
 import InfiniteScrollPage2 from './pages/InfiniteScrollPage'
 import InfiniteScrollPageIntersectionObserver from './pages/InfiniteScrollPageIntersectionObserver.jsx'
 import PdfDemoPage1 from './pages/pdfGenerator/PdfDemoPage1'
+import ProfilePage from './pages/profile/ProfilePage.jsx'
 import appStore from './redux/appStore'
 
 const App = () => {
@@ -22,6 +24,10 @@ const App = () => {
     {
       path: '/auth',
       element: <AuthPage />
+    },
+    {
+      path: '/profile',
+      element: <ProfilePage />
     },
     {
       path: "/infinite",
@@ -63,8 +69,8 @@ const App = () => {
           element: <ModalPage />
         },
         {
-          path:'toast',
-          element:<ToastNotificationPage/>
+          path: 'toast',
+          element: <ToastNotificationPage />
         }
       ]
     }
@@ -72,7 +78,9 @@ const App = () => {
 
   return (
     <Provider store={appStore}>
-      <RouterProvider router={appRoutes} />
+      <ToastProvider>
+        <RouterProvider router={appRoutes} />
+      </ToastProvider>
     </Provider>
   )
 }

@@ -13,7 +13,11 @@ import {
   UserPlus,
   Zap,
 } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { ToastContext } from "../../../context/ToastProvider";
+import { setUserData } from "../../redux/userSlice";
 import api from "../../utilities/axiosInstance";
 import CountdownTimer from "../common/CountdownTimer";
 
@@ -67,6 +71,52 @@ const AuthCard = ({ isGray }) => {
   const [otpMessage, setOtpMessage] = useState("");
   const [otpError, setOtpError] = useState(false);
   const [otpTimerStart, setOtpTimerStart] = useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { setToast } = useContext(ToastContext);
+
+  const validateForm = () => {
+    if (mode === "signup" && form.name.trim().length < 6) {
+      setToast({
+        type: "warning",
+        message: "Name must be at least 6 characters long.",
+        position: "top-center",
+      });
+      return false;
+    }
+
+    if (!form.email.trim()) {
+      setToast({
+        type: "warning",
+        message: "Please enter your email address.",
+        position: "top-center",
+      });
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(form.email.trim())) {
+      setToast({
+        type: "warning",
+        message: "Please enter a valid email address.",
+        position: "top-center",
+      });
+      return false;
+    }
+
+    if (form.password.length < 6) {
+      setToast({
+        type: "warning",
+        message: "Password must be at least 6 characters long.",
+        position: "top-center",
+      });
+      return false;
+    }
+
+    return true;
+  };
 
   const resetOtpState = () => {
     setOtpStep(false);
@@ -81,26 +131,31 @@ const AuthCard = ({ isGray }) => {
     resetOtpState();
   };
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
-  // 🔧 No real backend here — replace this with a real axios/fetch call to
-  // /api/auth/login or /api/auth/register (see the code tab below).
-  const fakeSubmit = () => {
-    setLoading(true);
+  const handleChange = (e) => {
     setSuccess(false);
-    setTimeout(() => {
-      setLoading(false);
-      setSuccess(true);
-    }, 1100);
-  };
+    setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
 
+      // Validate before any API call
+      if (!otpStep && !validateForm()) return;
+
       if (mode === "login") {
-        fakeSubmit();
-        return;
+        setLoading(true);
+        const res = await api.post("/auth/login", form);
+        if (res.data.success) {
+          setToast({ type: "success", message: res.data.message, position: "top-center" });
+          setLoading(false);
+          setSuccess(true);
+          dispatch(setUserData(res.data.user));
+          navigate("/")
+          setForm({ name: "", email: "", password: "" });
+          return;
+        }
       }
 
       if (!otpStep) {
@@ -110,21 +165,14 @@ const AuthCard = ({ isGray }) => {
 
         const res = await api.post("/auth/register", form);
         if (res.data.success) {
-          alert(res.data.message);
+          setToast({ type: "success", message: res.data.message, position: "top-center" });
           setLoading(false);
           setOtpStep(true);
           setOtpMessage(res.data.message);
           setOtpTimerStart(Date.now());
         } else {
-          alert(res.data.message);
+          setToast({ type: "error", message: res.data.message, position: "top-center" });
         }
-        // setTimeout(() => {
-        //   const nextOtp = generateOtp();
-        //   setLoading(false);
-        //   setOtpStep(true);
-        //   setOtp("");
-        //   setOtpMessage(`We sent a 6-digit code to ${form.email || "your email"}. Demo code: ${nextOtp}`);
-        // }, 1100);
         return;
       }
 
@@ -137,16 +185,19 @@ const AuthCard = ({ isGray }) => {
       setOtpTimerStart(null);
       const res = await api.post("/auth/verify-otp", { email: form.email, otp: otp });
       if (res.data.success) {
-        alert("You have successfully registered!");
+        setToast({ type: "success", message: "You have successfully registered!", position: "top-center" });
         setOtpStep(false);
         setOtp("");
         setOtpMessage("");
+        setSuccess(true);
+        dispatch(setUserData(res.data.user));
+        navigate("/")
         setForm({ name: "", email: "", password: "" });
       }
 
     } catch (error) {
       console.error("Error during form submission:", error);
-      alert(error.response?.data?.message || "An error occurred. Please try again.");
+      setToast({ type: "error", message: error.response?.data?.message || "An error occurred. Please try again.", position: "top-center" });
     } finally {
       setLoading(false);
     }
@@ -160,12 +211,12 @@ const AuthCard = ({ isGray }) => {
       setOtpTimerStart(null);
       const res = await api.post("/auth/resend-otp", { email: form.email });
       if (res.data.success) {
-        alert(res.data.message);
+        setToast({ type: "success", message: res.data.message, position: "top-center" });
         setOtpTimerStart(Date.now());
       }
     } catch (error) {
       console.error("Error resending OTP:", error);
-      alert(error.response?.data?.message || "An error occurred while resending OTP. Please try again.");
+      setToast({ type: "error", message: error.response?.data?.message || "An error occurred while resending OTP. Please try again.", position: "top-center" });
     } finally {
       setLoading(false);
     }
@@ -340,7 +391,7 @@ const AuthCard = ({ isGray }) => {
                   <p className="text-xs text-rose-500">That code didn’t match. Please try again.</p>
                 )}
 
-              {!otpTimerStart &&  <button
+                {!otpTimerStart && <button
                   type="button"
                   onClick={resendOtp}
                   className={`text-xs font-medium underline-offset-2 hover:underline ${isGray ? "text-cyan-400" : "text-indigo-600"}`}
@@ -402,7 +453,6 @@ const AuthCard = ({ isGray }) => {
                   <div className="flex items-center gap-2 rounded-xl bg-emerald-500/10 px-3.5 py-2.5 text-xs text-emerald-500">
                     <CheckCircle2 size={15} />
                     {mode === "login" ? "Logged in successfully" : "Account created successfully"}{" "}
-                    — demo only, no real account was made.
                   </div>
                 </motion.div>
               )}
@@ -419,7 +469,7 @@ const AuthCard = ({ isGray }) => {
 
             <button
               type="button"
-              onClick={fakeSubmit}
+              onClick={() => { }}
               disabled={loading}
               className={`flex w-full items-center justify-center gap-2.5 rounded-full border py-2.5 text-sm font-medium transition-colors disabled:opacity-70 ${isGray
                 ? "border-slate-700 text-slate-200 hover:bg-slate-800"
