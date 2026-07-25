@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Info, X, XCircle } from "lucide-react";
 import { createContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import api from "../src/utilities/axiosInstance";
@@ -66,48 +66,55 @@ const ToastProvider = ({ children }) => {
 
     console.log("isGray in ToastProvider:", isGray); // Debugging line to check the value of isGray
 
+// const toastStyles = {
+//   success: {
+//     icon: "✅",
+//     title: "Success",
+//     titleColor: isGray ? "text-gray-100" : "text-green-700",
+//     messageColor: isGray ? "text-gray-300" : "text-green-600",
+//     accent: isGray
+//       ? "bg-gray-700 text-gray-100"
+//       : "bg-green-100 text-green-600",
+//   },
+
+//   error: {
+//     icon: "❌",
+//     title: "Error",
+//     titleColor: isGray ? "text-gray-100" : "text-red-700",
+//     messageColor: isGray ? "text-gray-300" : "text-red-600",
+//     accent: isGray
+//       ? "bg-gray-700 text-gray-100"
+//       : "bg-red-100 text-red-600",
+//   },
+
+//   warning: {
+//     icon: "⚠️",
+//     title: "Warning",
+//     titleColor: isGray ? "text-gray-100" : "text-yellow-700",
+//     messageColor: isGray ? "text-gray-300" : "text-yellow-600",
+//     accent: isGray
+//       ? "bg-gray-700 text-gray-100"
+//       : "bg-yellow-100 text-yellow-600",
+//   },
+
+//   info: {
+//     icon: "ℹ️",
+//     title: "Information",
+//     titleColor: isGray ? "text-gray-100" : "text-blue-700",
+//     messageColor: isGray ? "text-gray-300" : "text-blue-600",
+//     accent: isGray
+//       ? "bg-gray-700 text-gray-100"
+//       : "bg-blue-100 text-blue-600",
+//   },
+// };
+
+
 const toastStyles = {
-  success: {
-    icon: "✅",
-    title: "Success",
-    titleColor: isGray ? "text-gray-100" : "text-green-700",
-    messageColor: isGray ? "text-gray-300" : "text-green-600",
-    accent: isGray
-      ? "bg-gray-700 text-gray-100"
-      : "bg-green-100 text-green-600",
-  },
-
-  error: {
-    icon: "❌",
-    title: "Error",
-    titleColor: isGray ? "text-gray-100" : "text-red-700",
-    messageColor: isGray ? "text-gray-300" : "text-red-600",
-    accent: isGray
-      ? "bg-gray-700 text-gray-100"
-      : "bg-red-100 text-red-600",
-  },
-
-  warning: {
-    icon: "⚠️",
-    title: "Warning",
-    titleColor: isGray ? "text-gray-100" : "text-yellow-700",
-    messageColor: isGray ? "text-gray-300" : "text-yellow-600",
-    accent: isGray
-      ? "bg-gray-700 text-gray-100"
-      : "bg-yellow-100 text-yellow-600",
-  },
-
-  info: {
-    icon: "ℹ️",
-    title: "Information",
-    titleColor: isGray ? "text-gray-100" : "text-blue-700",
-    messageColor: isGray ? "text-gray-300" : "text-blue-600",
-    accent: isGray
-      ? "bg-gray-700 text-gray-100"
-      : "bg-blue-100 text-blue-600",
-  },
+  success: { icon: CheckCircle2,    darkAccent: "bg-emerald-500/15 text-emerald-400", lightAccent: "bg-emerald-50 text-emerald-600",  title: "Success"     },
+  error:   { icon: XCircle,         darkAccent: "bg-red-500/15 text-red-400",         lightAccent: "bg-red-50 text-red-600",           title: "Error"       },
+  warning: { icon: AlertTriangle,   darkAccent: "bg-amber-500/15 text-amber-400",     lightAccent: "bg-amber-50 text-amber-600",       title: "Warning"     },
+  info:    { icon: Info,            darkAccent: "bg-cyan-500/15 text-cyan-400",       lightAccent: "bg-indigo-50 text-indigo-600",     title: "Information" },
 };
-
     const showToast = (data) => {
         setToast({ ...data, id: Date.now() });
         setVisible(false);
@@ -133,46 +140,49 @@ const toastStyles = {
     };
 
     const config = positions[toast?.position || "top-center"];
-    const style = toastStyles[toast?.type || "info"];
+    // const style = toastStyles[toast?.type || "info"];
+    const style  = toastStyles[toast?.type   || "info"];
+    const Icon   = style?.icon;
     return (
         <>
-            <div
-                key={toast?.id || "empty"}
-                onTransitionEnd={handleTransitionEnd}
-                className={`fixed z-[9999] transition-all duration-300
-          ${config.position}
-          ${visible ? config.show : config.hide}
-        `}
-            >
-                {toast && (
-                    <div className={`min-w-[320px] max-w-md rounded-xl shadow-2xl px-5 py-4 flex gap-3 ${style.accent}`}>
-                        <div
-                            className={`h-10 w-10 rounded-full flex items-center justify-center text-xl ${style.accent}`}
-                        >
-                            {style.icon}
-                        </div>
+      <div
+        key={toast?.id || "empty"}
+        onTransitionEnd={handleTransitionEnd}
+        className={`fixed z-[200] transition-all duration-300 ${config.position} ${visible ? config.show : config.hide}`}
+      >
+        {toast && (
+          <div
+            className={`flex min-w-[300px] max-w-sm items-start gap-3 rounded-2xl border p-4 shadow-2xl ${
+              isGray
+                ? "border-slate-700 bg-slate-900"
+                : "border-slate-200 bg-white"
+            }`}
+          >
+            {/* icon */}
+            <span className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl ${isGray ? style.darkAccent : style.lightAccent}`}>
+              {Icon && <Icon size={17} />}
+            </span>
 
-                        <div className="flex-1">
-                            <h4 className={`font-semibold ${style.titleColor}`}>
-                                {toast.title || style.title}
-                            </h4>
-
-                            <p className={`mt-1 text-sm ${style.messageColor}`}>
-                                {toast.message}
-                            </p>
-                        </div>
-
-                        <button
-                            type="button"
-                            onClick={() => {setVisible(false);setToast(null);}}
-                            className={`ml-2 cursor-pointer rounded-full h-6 w-6 flex items-center justify-center text-sm font-semibold transition border hover:bg-white/15 ${isGray ? 'text-gray-100' : 'text-slate-900'}`}
-                            aria-label="Close notification"
-                        >
-                            <X className="h-4 w-4" />
-                        </button>
-                    </div>
-                )}
+            {/* text */}
+            <div className="flex-1 pt-0.5">
+              <p className={`text-sm font-semibold ${isGray ? "text-slate-100" : "text-slate-900"}`}>
+                {toast.title || style.title}
+              </p>
+              <p className={`mt-0.5 text-xs leading-relaxed ${isGray ? "text-slate-400" : "text-slate-500"}`}>
+                {toast.message}
+              </p>
             </div>
+
+            {/* close */}
+            <button
+              onClick={() => setVisible(false)}
+              className={`flex-shrink-0 rounded-lg p-1 transition-colors ${isGray ? "text-slate-500 hover:bg-slate-800 hover:text-slate-300" : "text-slate-400 hover:bg-slate-100 hover:text-slate-700"}`}
+            >
+              <X size={14} />
+            </button>
+          </div>
+        )}
+      </div>
             <ToastContext.Provider value={{ setToast: showToast }}>
                 {children}
             </ToastContext.Provider>
