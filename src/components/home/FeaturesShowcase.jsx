@@ -30,7 +30,7 @@ import { useState } from "react";
 import FeatureCard from "./FeatureCard";
 
 // Every entry here becomes its own dedicated page later (see suggested routes).
-const features = [
+export const features = [
   { id: "image-carousel", icon: GalleryHorizontal, title: "Image Carousel", tag: "UI", path: "/features/image-carousel", description: "Auto-playing, swipeable image slider with dots & arrow controls." },
   { id: "infinite-scroll", icon: ArrowDownToLine, title: "Infinite Scroll", tag: "Data", path: "/features/infinite-scroll", description: "Loads more items automatically as the user scrolls down." },
   { id: "accordion-faq", icon: ChevronDown, title: "Accordion / FAQ", tag: "UI", path: "/features/accordion", description: "Expandable panels with smooth height animation." },
