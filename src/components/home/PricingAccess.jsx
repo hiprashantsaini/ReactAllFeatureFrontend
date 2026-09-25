@@ -1,6 +1,5 @@
-import React from "react";
 import { motion } from "framer-motion";
-import { CreditCard, Check, X, ShieldCheck } from "lucide-react";
+import { Check, CreditCard, ShieldCheck, X } from "lucide-react";
 
 const plans = [
   {
@@ -39,13 +38,13 @@ const PricingAccess = ({ isGray }) => {
   return (
     <section id="pricing" className="px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl text-center">
-        <span className={`font-mono text-xs uppercase tracking-widest ${isGray ? "text-cyan-400" : "text-indigo-600"}`}>
+        <span className={`font-mono text-xs uppercase tracking-widest text-(--accent-color1)`}>
           04 / Unlock Access
         </span>
-        <h2 className={`mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl ${isGray ? "text-slate-50" : "text-slate-900"}`}>
+        <h2 className={`mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl text-(--primary-text)`}>
           Pay once, copy forever
         </h2>
-        <p className={`mt-3 text-sm sm:text-base ${isGray ? "text-slate-400" : "text-slate-600"}`}>
+        <p className={`mt-3 text-sm sm:text-base text-(--secondary-text)`}>
           Secure checkout powered by Razorpay. No subscriptions, no hidden fees.
         </p>
       </div>
@@ -63,9 +62,7 @@ const PricingAccess = ({ isGray }) => {
                 ? isGray
                   ? "border-cyan-700 bg-slate-900 shadow-2xl shadow-cyan-900/30"
                   : "border-indigo-300 bg-white shadow-2xl shadow-indigo-200/60"
-                : isGray
-                ? "border-slate-800 bg-slate-900/50"
-                : "border-slate-200 bg-white"
+                : "border-(--primary-border) bg-(--primary-bg)"
             }`}
           >
             {plan.highlighted && (
@@ -80,11 +77,11 @@ const PricingAccess = ({ isGray }) => {
               </span>
             )}
 
-            <h3 className={`text-lg font-semibold ${isGray ? "text-slate-100" : "text-slate-900"}`}>
+            <h3 className={`text-lg font-semibold text-(--primary-text)`}>
               {plan.name}
             </h3>
-            <p className={`mt-1 text-sm ${isGray ? "text-slate-500" : "text-slate-400"}`}>{plan.note}</p>
-            <p className={`mt-4 text-4xl font-extrabold ${isGray ? "text-slate-50" : "text-slate-900"}`}>
+            <p className={`mt-1 text-sm text-(--secondary-text)`}>{plan.note}</p>
+            <p className={`mt-4 text-4xl font-extrabold text-(--primary-text)`}>
               {plan.price}
             </p>
 
@@ -96,7 +93,7 @@ const PricingAccess = ({ isGray }) => {
                   ) : (
                     <X size={16} className={isGray ? "text-slate-600" : "text-slate-300"} />
                   )}
-                  <span className={perk.included ? (isGray ? "text-slate-300" : "text-slate-600") : (isGray ? "text-slate-600" : "text-slate-400")}>
+                  <span className={perk.included ? "text-(--primary-text)" : "text-(--secondary-text)"}>
                     {perk.text}
                   </span>
                 </li>
@@ -117,9 +114,7 @@ const PricingAccess = ({ isGray }) => {
             ) : (
               <a
                 href="#features"
-                className={`mt-7 flex w-full items-center justify-center rounded-full border px-5 py-3 text-sm font-semibold ${
-                  isGray ? "border-slate-700 text-slate-200" : "border-slate-300 text-slate-700"
-                }`}
+                className={`mt-7 flex w-full border-(--primary-border) text-(--primary-text) items-center justify-center rounded-full border px-5 py-3 text-sm font-semibold}`}
               >
                 Keep browsing free
               </a>
@@ -129,9 +124,7 @@ const PricingAccess = ({ isGray }) => {
       </div>
 
       <p
-        className={`mx-auto mt-6 flex max-w-3xl items-center justify-center gap-2 text-center text-xs ${
-          isGray ? "text-slate-500" : "text-slate-400"
-        }`}
+        className={`mx-auto mt-6 flex max-w-3xl items-center justify-center gap-2 text-center text-xs text-(--secondary-text)`}
       >
         <ShieldCheck size={14} />
         Payments are verified server-side before access is unlocked — your card details never touch this app.

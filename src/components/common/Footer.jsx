@@ -1,4 +1,4 @@
-import { Code2} from "lucide-react";
+import { Code2 } from "lucide-react";
 import { BsGithub, BsLinkedin, BsTwitter } from "react-icons/bs";
 
 const columns = [
@@ -19,9 +19,7 @@ const columns = [
 const Footer = ({ isGray }) => {
   return (
     <footer
-      className={`border-t px-4 pt-14 pb-8 sm:px-6 lg:px-8 ${
-        isGray ? "border-slate-800 bg-slate-950" : "border-slate-200 bg-slate-50"
-      }`}
+      className={`border-t px-4 pt-14 pb-8 sm:px-6 lg:px-8 border-(--primary-border) bg-(--primary-bg)`}
     >
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
@@ -36,11 +34,11 @@ const Footer = ({ isGray }) => {
               >
                 <Code2 size={16} className="text-white" />
               </span>
-              <span className={`font-mono text-sm font-bold ${isGray ? "text-slate-100" : "text-slate-900"}`}>
+              <span className={`font-mono text-sm font-bold text-(--primary-text)`}>
                 ReactAllFeatures
               </span>
             </div>
-            <p className={`mt-3 max-w-xs text-sm ${isGray ? "text-slate-500" : "text-slate-500"}`}>
+            <p className={`mt-3 max-w-xs text-sm text-(--secondary-text)`}>
               A growing library of real, working React + MERN feature pages for beginners.
             </p>
             <div className="mt-4 flex gap-3">
@@ -48,11 +46,7 @@ const Footer = ({ isGray }) => {
                 <a
                   key={i}
                   href="#"
-                  className={`flex h-8 w-8 items-center justify-center rounded-full border transition-colors ${
-                    isGray
-                      ? "border-slate-800 text-slate-400 hover:text-cyan-400"
-                      : "border-slate-200 text-slate-500 hover:text-indigo-600"
-                  }`}
+                  className={`flex h-8 w-8 text-(--secondary-text) border-(--primary-border) hover:text-(--accent-color1) items-center justify-center rounded-full border transition-colors`}
                 >
                   <Icon size={14} />
                 </a>
@@ -62,7 +56,7 @@ const Footer = ({ isGray }) => {
 
           {columns.map((col) => (
             <div key={col.title}>
-              <h4 className={`text-sm font-semibold ${isGray ? "text-slate-200" : "text-slate-900"}`}>
+              <h4 className={`text-sm font-semibold text-(--primary-text)`}>
                 {col.title}
               </h4>
               <ul className="mt-4 space-y-2.5">
@@ -70,9 +64,7 @@ const Footer = ({ isGray }) => {
                   <li key={link}>
                     <a
                       href="#"
-                      className={`text-sm ${
-                        isGray ? "text-slate-500 hover:text-slate-200" : "text-slate-500 hover:text-slate-900"
-                      }`}
+                      className={`text-sm text-(--secondary-text) hover:text-(--primary-text)`}
                     >
                       {link}
                     </a>
@@ -84,9 +76,7 @@ const Footer = ({ isGray }) => {
         </div>
 
         <div
-          className={`mt-12 flex flex-col items-center justify-between gap-3 border-t pt-6 text-xs sm:flex-row ${
-            isGray ? "border-slate-800 text-slate-500" : "border-slate-200 text-slate-400"
-          }`}
+          className={`mt-12 flex flex-col items-center justify-between gap-3 border-t pt-6 text-xs sm:flex-row text-(--secondary-text) hover:text-(--primary-text)`}
         >
           <p>© {new Date().getFullYear()} ReactAllCodeAndFeatures. Built for learners.</p>
           <p>Made with React, Tailwind CSS &amp; Framer Motion</p>

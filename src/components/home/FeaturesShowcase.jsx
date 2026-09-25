@@ -41,25 +41,63 @@ export const features = [
   { id: "tabs", icon: LayoutPanelTop, title: "Tabs", tag: "UI", path: "/features/tabs", description: "Animated underline tabs for switching between content panels." },
   { id: "modal-dialog", icon: Maximize2, title: "Modal / Dialog", tag: "UI", path: "/features/modal", description: "Accessible popup dialog with backdrop blur and exit animation." },
   { id: "toast-notifications", icon: Bell, title: "Toast Notifications", tag: "Feedback", path: "/features/toast", description: "Stackable success / error toasts that auto-dismiss." },
-  { id: "drag-drop", icon: Move, title: "Drag & Drop", tag: "Interaction", path: "/features/drag-drop", description: "Reorderable list and a mini Kanban board using drag events." },
-  { id: "multi-step-form", icon: ListChecks, title: "Multi-step Form", tag: "Forms", path: "/features/multi-step-form", description: "Wizard-style form with progress indicator and step validation." },
-  { id: "form-validation", icon: ShieldCheck, title: "Form Validation", tag: "Forms", path: "/features/form-validation", description: "React Hook Form + schema validation with inline error messages." },
-  { id: "data-table", icon: Table2, title: "Data Table", tag: "Data", path: "/features/data-table", description: "Sortable, filterable, paginated table built from scratch." },
-  { id: "virtualized-list", icon: Rows3, title: "Virtualized List", tag: "Performance", path: "/features/virtualized-list", description: "Renders only visible rows to handle 10,000+ items smoothly." },
-  { id: "debounced-search", icon: Search, title: "Debounced Search", tag: "Hooks", path: "/features/debounced-search", description: "Custom useDebounce hook to delay API calls while typing." },
-  { id: "theme-switcher", icon: SunMoon, title: "Dark / Light Theme", tag: "Redux", path: "/features/theme-switcher", description: "Global theme toggle powered by the Redux user slice." },
-  { id: "charts-graphs", icon: BarChart3, title: "Charts & Graphs", tag: "Data Viz", path: "/features/charts", description: "Bar, line and pie charts built with a lightweight charting lib." },
-  { id: "file-upload", icon: Upload, title: "File Upload", tag: "Forms", path: "/features/file-upload", description: "Drag-to-upload with image preview and a progress bar." },
-  { id: "context-menu", icon: MousePointerClick, title: "Context Menu", tag: "Interaction", path: "/features/context-menu", description: "Custom right-click menu positioned at the cursor." },
-  { id: "tooltip-popover", icon: Info, title: "Tooltip & Popover", tag: "UI", path: "/features/tooltip", description: "Hover/click tooltips that auto-flip to stay on screen." },
-  { id: "star-rating", icon: Star, title: "Star Rating", tag: "UI", path: "/features/rating", description: "Hover-to-preview, click-to-set star rating component." },
-  { id: "skeleton-loading", icon: Loader, title: "Skeleton Loading", tag: "UX", path: "/features/skeleton-loading", description: "Animated placeholder shimmer shown while data is fetching." },
-  { id: "realtime-chat", icon: Wifi, title: "Realtime Chat", tag: "MERN", path: "/features/realtime-chat", description: "Socket.io powered chat room with live typing indicator." },
-  { id: "auth-login-signup", icon: LogIn, title: "Auth: Login & Signup", tag: "MERN", path: "/features/demo-auth", description: "JWT based authentication flow against an Express + MongoDB API." },
-  { id: "protected-routes", icon: Lock, title: "Protected Routes", tag: "Routing", path: "/features/protected-routes", description: "Route guards that redirect unauthenticated users to login." },
-  { id: "date-picker", icon: Calendar, title: "Date Picker", tag: "Forms", path: "/features/date-picker", description: "Custom calendar dropdown for picking a single date or range." },
-  { id: "razorpay-checkout", icon: CreditCard, title: "Razorpay Checkout", tag: "Payments", path: "/features/razorpay-checkout", description: "Order creation + checkout to unlock the full source access." },
-  { id: "breadcrumb-trail", icon: ChevronsRight, title: "Breadcrumb Trail", tag: "Navigation", path: "/features/breadcrumb", description: "Dynamic breadcrumb generated from the current route path." },
+  { id: "auth-login-signup", icon: LogIn, title: "Auth: Login & Signup", tag: "MERN",  path: "/features/demo-auth", description: "JWT based authentication flow against an Express + MongoDB API." },
+  {
+    id: "drag-drop", icon: Move, title: "Drag & Drop", tag: "Interaction",
+    //  path: "/features/drag-drop",
+    description: "Reorderable list and a mini Kanban board using drag events."
+  },
+  { id: "multi-step-form", icon: ListChecks, title: "Multi-step Form", tag: "Forms", 
+    // path: "/features/multi-step-form",
+     description: "Wizard-style form with progress indicator and step validation." },
+  { id: "form-validation", icon: ShieldCheck, title: "Form Validation", tag: "Forms", 
+    // path: "/features/form-validation", 
+    description: "React Hook Form + schema validation with inline error messages." },
+  { id: "data-table", icon: Table2, title: "Data Table", tag: "Data", 
+    // path: "/features/data-table", 
+    description: "Sortable, filterable, paginated table built from scratch." },
+  { id: "virtualized-list", icon: Rows3, title: "Virtualized List", tag: "Performance", 
+    // path: "/features/virtualized-list", 
+    description: "Renders only visible rows to handle 10,000+ items smoothly." },
+  { id: "debounced-search", icon: Search, title: "Debounced Search", tag: "Hooks", 
+    // path: "/features/debounced-search", 
+    description: "Custom useDebounce hook to delay API calls while typing." },
+  { id: "theme-switcher", icon: SunMoon, title: "Dark / Light Theme", tag: "Redux", 
+    // path: "/features/theme-switcher", 
+    description: "Global theme toggle powered by the Redux user slice." },
+  { id: "charts-graphs", icon: BarChart3, title: "Charts & Graphs", tag: "Data Viz", 
+    // path: "/features/charts", 
+    description: "Bar, line and pie charts built with a lightweight charting lib." },
+  { id: "file-upload", icon: Upload, title: "File Upload", tag: "Forms", 
+    // path: "/features/file-upload", 
+    description: "Drag-to-upload with image preview and a progress bar." },
+  { id: "context-menu", icon: MousePointerClick, title: "Context Menu", tag: "Interaction", 
+    // path: "/features/context-menu", 
+    description: "Custom right-click menu positioned at the cursor." },
+  { id: "tooltip-popover", icon: Info, title: "Tooltip & Popover", tag: "UI", 
+    // path: "/features/tooltip", 
+    description: "Hover/click tooltips that auto-flip to stay on screen." },
+  { id: "star-rating", icon: Star, title: "Star Rating", tag: "UI", 
+    // path: "/features/rating", 
+    description: "Hover-to-preview, click-to-set star rating component." },
+  { id: "skeleton-loading", icon: Loader, title: "Skeleton Loading", tag: "UX", 
+    // path: "/features/skeleton-loading", 
+    description: "Animated placeholder shimmer shown while data is fetching." },
+  { id: "realtime-chat", icon: Wifi, title: "Realtime Chat", tag: "MERN", 
+    // path: "/features/realtime-chat", 
+    description: "Socket.io powered chat room with live typing indicator." },
+  { id: "protected-routes", icon: Lock, title: "Protected Routes", tag: "Routing", 
+    // path: "/features/protected-routes", 
+    description: "Route guards that redirect unauthenticated users to login." },
+  { id: "date-picker", icon: Calendar, title: "Date Picker", tag: "Forms", 
+    // path: "/features/date-picker", 
+    description: "Custom calendar dropdown for picking a single date or range." },
+  { id: "razorpay-checkout", icon: CreditCard, title: "Razorpay Checkout", tag: "Payments", 
+    // path: "/features/razorpay-checkout", 
+    description: "Order creation + checkout to unlock the full source access." },
+  { id: "breadcrumb-trail", icon: ChevronsRight, title: "Breadcrumb Trail", tag: "Navigation", 
+    // path: "/features/breadcrumb", 
+    description: "Dynamic breadcrumb generated from the current route path." },
 ];
 
 const FILTERS = ["All", "UI", "Forms", "Data", "MERN"];
@@ -125,12 +163,12 @@ const FeaturesShowcase = ({ isGray }) => {
               key={f}
               onClick={() => setFilter(f)}
               className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${filter === f ? "" : "text-(--secondary-text)"} ${filter === f
-                  ? isGray
-                    ? "bg-linear-to-r from-cyan-500 to-violet-600 text-white"
-                    : "bg-linear-to-r from-indigo-600 to-fuchsia-600 text-white"
-                  : isGray
-                    ? "bg-slate-900 hover:text-slate-200"
-                    : "bg-slate-100 hover:bg-slate-200"
+                ? isGray
+                  ? "bg-linear-to-r from-cyan-500 to-violet-600 text-white"
+                  : "bg-linear-to-r from-indigo-600 to-fuchsia-600 text-white"
+                : isGray
+                  ? "bg-slate-900 hover:text-slate-200"
+                  : "bg-slate-100 hover:bg-slate-200"
                 }`}
             >
               {f}

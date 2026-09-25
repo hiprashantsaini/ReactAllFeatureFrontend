@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, PlayCircle, Terminal, Circle } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight, Circle, PlayCircle, Terminal } from "lucide-react";
+import { useEffect, useState } from "react";
 
 // The rotating list shown inside the fake "editor" — keeps the hero feeling alive
 // without relying on a generic stat-block.
@@ -56,9 +56,7 @@ const HeroSection = ({ isGray }) => {
           </span>
 
           <h1
-            className={`mt-6 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl ${
-              isGray ? "text-slate-50" : "text-slate-900"
-            }`}
+            className={`mt-6 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl text-(--primary-text)`}
           >
             Every React feature,{" "}
             <span
@@ -73,9 +71,7 @@ const HeroSection = ({ isGray }) => {
           </h1>
 
           <p
-            className={`mt-5 max-w-xl text-base leading-relaxed sm:text-lg ${
-              isGray ? "text-slate-400" : "text-slate-600"
-            }`}
+            className={`mt-5 max-w-xl text-base leading-relaxed sm:text-lg text-(--secondary-text)`}
           >
             ReactAllCodeAndFeatures is a growing collection of real, working
             pages — carousels, infinite scroll, breadcrumbs, drag &amp; drop,
@@ -97,10 +93,10 @@ const HeroSection = ({ isGray }) => {
             </a>
             <a
               href="#how-it-works"
-              className={`flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-semibold transition-colors ${
+              className={`flex items-center border-(--primary-border) text-(--primary-text) gap-2 rounded-full border px-6 py-3 text-sm font-semibold transition-colors ${
                 isGray
-                  ? "border-slate-700 text-slate-200 hover:bg-slate-900"
-                  : "border-slate-300 text-slate-700 hover:bg-slate-50"
+                  ? "hover:bg-slate-900"
+                  : "hover:bg-slate-50"
               }`}
             >
               <PlayCircle size={16} />

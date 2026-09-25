@@ -1,6 +1,5 @@
-import React from "react";
 import { motion } from "framer-motion";
-import { Star, Quote } from "lucide-react";
+import { Quote, Star } from "lucide-react";
 
 const testimonials = [
   {
@@ -27,10 +26,10 @@ const Testimonials = ({ isGray }) => {
   return (
     <section className="px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl text-center">
-        <span className={`font-mono text-xs uppercase tracking-widest ${isGray ? "text-cyan-400" : "text-indigo-600"}`}>
+        <span className={`font-mono text-xs uppercase tracking-widest text-(--accent-color2)`}>
           05 / From Learners
         </span>
-        <h2 className={`mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl ${isGray ? "text-slate-50" : "text-slate-900"}`}>
+        <h2 className={`mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl text-(--primary-text)`}>
           What other beginners are building
         </h2>
       </div>
@@ -43,21 +42,19 @@ const Testimonials = ({ isGray }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: i * 0.1 }}
-            className={`rounded-2xl border p-6 ${
-              isGray ? "border-slate-800 bg-slate-900/60" : "border-slate-200 bg-white shadow-sm"
-            }`}
+            className={`rounded-2xl border p-6 border-(--primary-border) bg-(--primary-bg) shadow-sm`}
           >
-            <Quote size={20} className={isGray ? "text-cyan-400" : "text-indigo-400"} />
-            <p className={`mt-3 text-sm leading-relaxed ${isGray ? "text-slate-300" : "text-slate-600"}`}>
+            <Quote size={20} className={"text-(--accent-color1)"} />
+            <p className={`mt-3 text-sm leading-relaxed text-(--primary-text)`}>
               {t.text}
             </p>
             <div className="mt-5 flex items-center gap-3">
               <img src={t.avatar} alt={t.name} className="h-10 w-10 rounded-full object-cover" />
               <div>
-                <p className={`text-sm font-semibold ${isGray ? "text-slate-100" : "text-slate-900"}`}>
+                <p className={`text-sm font-semibold text-(--primary-text)`}>
                   {t.name}
                 </p>
-                <p className={`text-xs ${isGray ? "text-slate-500" : "text-slate-400"}`}>{t.role}</p>
+                <p className={`text-xs text-(--secondary-text)`}>{t.role}</p>
               </div>
             </div>
             <div className="mt-3 flex gap-0.5">

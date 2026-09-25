@@ -35,11 +35,7 @@ const HomePage = () => {
 
   return (
     <div
-      className={`min-h-screen w-full transition-colors duration-500 relative ${
-        isGray
-          ? "bg-slate-950 text-slate-100"
-          : "bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900"
-      }`}
+      className={`min-h-screen w-full transition-colors duration-500 relative bg-(--primary-bg) text-(--primary-text)`}
     >
       <Navbar isGray={isGray} />
      <HeroSection isGray={isGray} />

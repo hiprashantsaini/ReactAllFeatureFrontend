@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { LayoutGrid, Layers, GraduationCap, Infinity as InfinityIcon } from "lucide-react";
+import { GraduationCap, Infinity as InfinityIcon, Layers, LayoutGrid } from "lucide-react";
 
 const stats = [
   { icon: LayoutGrid, value: "50+", label: "Feature pages" },
@@ -12,10 +12,10 @@ const StatsSection = ({ isGray }) => {
   return (
     <section className="px-4 py-10 sm:px-6 lg:px-8">
       <div
-        className={`mx-auto grid max-w-7xl grid-cols-2 gap-4 rounded-3xl border p-6 sm:grid-cols-4 sm:p-8 ${
+        className={`mx-auto grid max-w-7xl border-(--primary-border) bg-(--secondary-bg) grid-cols-2 gap-4 rounded-3xl border p-6 sm:grid-cols-4 sm:p-8 ${
           isGray
-            ? "border-slate-800 bg-slate-900/60"
-            : "border-slate-200 bg-white shadow-xl shadow-slate-200/60"
+            ? ""
+            : "shadow-xl shadow-slate-200/60"
         }`}
       >
         {stats.map((stat, i) => {
@@ -39,14 +39,12 @@ const StatsSection = ({ isGray }) => {
                 <Icon size={18} />
               </span>
               <span
-                className={`text-xl font-bold sm:text-2xl ${
-                  isGray ? "text-slate-50" : "text-slate-900"
-                }`}
+                className={`text-xl font-bold sm:text-2xl text-(--primary-text)`}
               >
                 {stat.value}
               </span>
               <span
-                className={`text-xs sm:text-sm ${isGray ? "text-slate-400" : "text-slate-500"}`}
+                className={`text-xs sm:text-sm text-(--secondary-text)`}
               >
                 {stat.label}
               </span>

@@ -30,10 +30,7 @@ const Navbar = ({ isGray }) => {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full border-b backdrop-blur-xl transition-colors duration-500 ${isGray
-        ? "bg-slate-950/80 border-slate-800"
-        : "bg-white/70 border-slate-200"
-        }`}
+      className={`sticky top-0 z-50 w-full backdrop-blur-xl transition-colors duration-500 border-b border-(--primary-border) bg-(--secondary-bg) md:bg-(--secondary-bg)/40`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         {/* Logo */}
@@ -47,9 +44,9 @@ const Navbar = ({ isGray }) => {
             <li key={link.label}>
               <Link
                 to={link.to}
-                className={`text-sm font-medium transition-colors ${isGray
-                  ? "text-slate-300 hover:text-cyan-400"
-                  : "text-slate-600 hover:text-indigo-600"
+                className={`text-sm font-medium transition-colors text-(--secondary-text) ${isGray
+                  ? " hover:text-cyan-400"
+                  : " hover:text-indigo-600"
                   }`}
               >
                 {link.label}
@@ -64,9 +61,9 @@ const Navbar = ({ isGray }) => {
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className={`flex h-9 w-9 items-center justify-center rounded-full border transition-colors ${isGray
-              ? "border-slate-700 text-amber-300 hover:bg-slate-800"
-              : "border-slate-200 text-indigo-600 hover:bg-slate-100"
+            className={`flex h-9 w-9 items-center justify-center cursor-pointer rounded-full border border-(--primary-border) transition-colors ${isGray
+              ? "text-amber-300 hover:bg-slate-800"
+              : "text-indigo-600 hover:bg-slate-100"
               }`}
           >
             {isGray ? <Sun size={16} /> : <Moon size={16} />}
@@ -74,18 +71,18 @@ const Navbar = ({ isGray }) => {
 
           {userData ? <Link
             to={"/profile"}
-            className={`text-sm font-medium transition-colors ${isGray
-              ? "text-slate-300 hover:text-cyan-400"
-              : "text-slate-600 hover:text-indigo-600"
+            className={`text-sm font-medium transition-colors text-(--secondary-text) ${isGray
+              ? " hover:text-cyan-400"
+              : " hover:text-indigo-600"
               }`}
           >
             Profile
           </Link> : (
             <Link
               to={"/auth"}
-              className={`text-sm font-medium transition-colors ${isGray
-                ? "text-slate-300 hover:text-cyan-400"
-                : "text-slate-600 hover:text-indigo-600"
+              className={`text-sm font-medium text-(--secondary-text) transition-colors ${isGray
+                ? "hover:text-cyan-400"
+                : "hover:text-indigo-600"
                 }`}
             >
               Login
@@ -106,7 +103,7 @@ const Navbar = ({ isGray }) => {
 
         {/* Mobile toggle */}
         <button
-          className={`md:hidden ${isGray ? "text-slate-200" : "text-slate-800"}`}
+          className={`md:hidden text-(--primary-text)`}
           onClick={() => setOpen((p) => !p)}
           aria-label="Toggle menu"
         >
@@ -121,8 +118,7 @@ const Navbar = ({ isGray }) => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className={`md:hidden border-t ${isGray ? "border-slate-800 bg-slate-950" : "border-slate-200 bg-white"
-              }`}
+            className={`md:hidden border-t border-(--primary-border) bg-(--secondary-bg)`}
           >
             <div className="flex flex-col gap-4 px-6 py-5">
               {navLinks.map((link) => (
@@ -130,8 +126,7 @@ const Navbar = ({ isGray }) => {
                   key={link.label}
                   href={link.to}
                   onClick={() => setOpen(false)}
-                  className={`text-sm font-medium ${isGray ? "text-slate-200" : "text-slate-700"
-                    }`}
+                  className={`text-sm font-medium text-(--secondary-text)`}
                 >
                   {link.label}
                 </a>
@@ -139,17 +134,13 @@ const Navbar = ({ isGray }) => {
 
               <Link
                 to={"/profile"}
-                className={`text-sm font-medium transition-colors ${isGray
-                  ? "text-slate-300 hover:text-cyan-400"
-                  : "text-slate-600 hover:text-indigo-600"
-                  }`}
+                className={`text-sm font-medium transition-colors text-(--secondary-text) hover:text-(--accent-color1)`}
               >
                 Profile
               </Link>
               <button
                 onClick={toggleTheme}
-                className={`flex items-center gap-2 text-sm font-medium ${isGray ? "text-amber-300" : "text-indigo-600"
-                  }`}
+                className={`flex items-center gap-2 text-sm font-medium text-(--accent-color4)`}
               >
                 {isGray ? <Sun size={16} /> : <Moon size={16} />}
                 Switch theme

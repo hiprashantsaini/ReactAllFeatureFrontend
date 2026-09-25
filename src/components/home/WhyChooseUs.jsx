@@ -1,4 +1,3 @@
-import React from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 
@@ -21,9 +20,7 @@ const WhyChooseUs = ({ isGray }) => {
           className="relative"
         >
           <div
-            className={`overflow-hidden rounded-3xl border shadow-2xl ${
-              isGray ? "border-slate-800" : "border-slate-200"
-            }`}
+            className={`overflow-hidden rounded-3xl border shadow-2xl border-(--primary-border)`}
           >
             {/* Free-to-use Unsplash photo */}
             <img
@@ -33,12 +30,10 @@ const WhyChooseUs = ({ isGray }) => {
             />
           </div>
           <div
-            className={`absolute -bottom-6 -right-6 hidden rounded-2xl border px-5 py-4 shadow-xl sm:block ${
-              isGray ? "border-slate-800 bg-slate-900" : "border-slate-200 bg-white"
-            }`}
+            className={`absolute -bottom-6 -right-6 hidden rounded-2xl border px-5 py-4 shadow-xl border-(--primary-border) bg-(--primary-bg) sm:block`}
           >
-            <p className={`font-mono text-xs ${isGray ? "text-slate-500" : "text-slate-400"}`}>npm run dev</p>
-            <p className="mt-1 text-sm font-semibold text-emerald-500">✓ Compiled successfully</p>
+            <p className={`font-mono text-xs text-(--secondary-text)`}>npm run dev</p>
+            <p className="mt-1 text-sm font-semibold text-(--accent-color2)">✓ Compiled successfully</p>
           </div>
         </motion.div>
 
@@ -48,10 +43,10 @@ const WhyChooseUs = ({ isGray }) => {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <span className={`font-mono text-xs uppercase tracking-widest ${isGray ? "text-cyan-400" : "text-indigo-600"}`}>
+          <span className={`font-mono text-xs uppercase tracking-widest text-(--accent-color4)`}>
             03 / Why This Project
           </span>
-          <h2 className={`mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl ${isGray ? "text-slate-50" : "text-slate-900"}`}>
+          <h2 className={`mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl text-(--primary-text)`}>
             Built for people who learn by reading real code
           </h2>
           <ul className="mt-7 space-y-4">
@@ -59,9 +54,9 @@ const WhyChooseUs = ({ isGray }) => {
               <li key={b} className="flex items-start gap-3">
                 <CheckCircle2
                   size={20}
-                  className={`mt-0.5 flex-shrink-0 ${isGray ? "text-cyan-400" : "text-indigo-600"}`}
+                  className={`mt-0.5 flex-shrink-0 text-(--accent-color3)`}
                 />
-                <span className={`text-sm sm:text-base ${isGray ? "text-slate-300" : "text-slate-600"}`}>
+                <span className={`text-sm sm:text-base text-(--secondary-text)`}>
                   {b}
                 </span>
               </li>

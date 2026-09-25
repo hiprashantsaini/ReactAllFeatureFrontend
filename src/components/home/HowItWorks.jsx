@@ -1,4 +1,3 @@
-import React from "react";
 import { motion } from "framer-motion";
 import { Compass, Copy, Rocket } from "lucide-react";
 
@@ -24,10 +23,10 @@ const HowItWorks = ({ isGray }) => {
   return (
     <section id="how-it-works" className="px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl text-center">
-        <span className={`font-mono text-xs uppercase tracking-widest ${isGray ? "text-cyan-400" : "text-indigo-600"}`}>
+        <span className={`font-mono text-xs uppercase tracking-widest text-(--accent-color2)`}>
           02 / The Flow
         </span>
-        <h2 className={`mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl ${isGray ? "text-slate-50" : "text-slate-900"}`}>
+        <h2 className={`mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl text-(--primary-text)`}>
           Learning, in three honest steps
         </h2>
       </div>
@@ -51,18 +50,14 @@ const HowItWorks = ({ isGray }) => {
               className="relative flex flex-col items-center text-center"
             >
               <span
-                className={`flex h-14 w-14 items-center justify-center rounded-2xl border shadow-md ${
-                  isGray
-                    ? "border-slate-800 bg-slate-900 text-cyan-300"
-                    : "border-slate-200 bg-white text-indigo-600"
-                }`}
+                className={`flex h-14 w-14 items-center border-(--primary-border) bg-(--primary-bg) text-(--accent-color2) justify-center rounded-2xl border shadow-md`}
               >
                 <Icon size={22} />
               </span>
-              <h3 className={`mt-5 text-lg font-semibold ${isGray ? "text-slate-100" : "text-slate-900"}`}>
+              <h3 className={`mt-5 text-lg font-semibold text-(--primary-text)`}>
                 {step.title}
               </h3>
-              <p className={`mt-2 max-w-xs text-sm ${isGray ? "text-slate-400" : "text-slate-500"}`}>
+              <p className={`mt-2 max-w-xs text-sm text-(--secondary-text)`}>
                 {step.description}
               </p>
             </motion.div>
