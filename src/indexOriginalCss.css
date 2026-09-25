@@ -1,0 +1,31 @@
+/* light theme  */
+:root { 
+  --primary-bg:#f8fafc; /*Main page bg*/
+  --secondary-bg:#ffffff;  /*Cards bg*/
+  --primary-text:#0f172b; /*Main text 100% visibility*/
+  --secondary-text:  #45556c;    /*Like description*/
+
+  --primary-border: #e2e8f0; /*Main cards border*/
+  --primary-hover-border:#a3b3ff;
+
+    /* Accent & Action Colors (Vibrant/Bold) */
+  --accent-color1: #4f39f6;       /* For links, primary buttons, informational badges */
+  --accent-color2: #22c55e;       /* Green 400 (Brighter green, highly visible for success) */
+  --accent-color3: #ef4444;       /* Red 400 (Softer, pastelly red that doesn't burn the eyes) */
+  --accent-color4: #eab308;       /* Amber 400 (Warm, glowing yellow for warnings/stars) */
+}
+
+.gray-theme {
+  --primary-bg:#020618;
+  --secondary-bg:#0f172b;
+  --primary-text:#f8fafc;
+  --secondary-text:  #90a1b9; 
+  --primary-border:  #1d293d;
+  --primary-hover-border:#0e7490;
+
+  /* Accent & Action Colors (Vibrant/Bold) */
+  --accent-color1: #22d3ee;       /* For links, primary buttons, informational badges */
+  --accent-color2: #4ade80;       /* Green 400 (Brighter green, highly visible for success) */
+  --accent-color3: #f87171;       /* Red 400 (Softer, pastelly red that doesn't burn the eyes) */
+  --accent-color4: #fbbf24;       /* Amber 400 (Warm, glowing yellow for warnings/stars) */
+}

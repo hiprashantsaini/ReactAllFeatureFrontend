@@ -15,10 +15,10 @@ const FeatureCard = ({ icon: Icon, title, description, tag, path, isGray, index 
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: (index % 8) * 0.05 }}
       whileHover={{ y: -4 }}
-      className={`group relative overflow-hidden rounded-2xl border p-5 transition-colors ${
+      className={`group relative overflow-hidden rounded-2xl border p-5 transition-colors hover:border-(--primary-hover-border) bg-(--secondary-bg) border-(--primary-border) ${
         isGray
-          ? "border-slate-800 bg-slate-900/70 hover:border-cyan-700"
-          : "border-slate-200 bg-white hover:border-indigo-300 shadow-sm hover:shadow-lg hover:shadow-indigo-100"
+          ? ""
+          : " shadow-sm hover:shadow-lg hover:shadow-indigo-100"
       }`}
     >
       {/* corner glow on hover */}
@@ -39,29 +39,25 @@ const FeatureCard = ({ icon: Icon, title, description, tag, path, isGray, index 
           <Icon size={18} />
         </span>
         <span
-          className={`rounded-full px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider ${
-            isGray ? "bg-slate-800 text-slate-400" : "bg-slate-100 text-slate-500"
-          }`}
+          className={`rounded-full px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-(--secondary-text) bg-(--primary-bg)`}
         >
           {tag}
         </span>
       </div>
 
       <h3
-        className={`relative mt-4 text-base font-semibold ${
-          isGray ? "text-slate-100" : "text-slate-900"
-        }`}
+        className={`relative mt-4 text-base font-semibold text-(--primary-text)`}
       >
         {title}
       </h3>
-      <p className={`relative mt-1.5 text-sm leading-relaxed ${isGray ? "text-slate-400" : "text-slate-500"}`}>
+      <p className={`relative mt-1.5 text-sm leading-relaxed text-(--secondary-text)`}>
         {description}
       </p>
 
       <Link
         to={path}
-        className={`relative mt-4 inline-flex items-center gap-1 text-sm font-medium ${
-          isGray ? "text-cyan-400 hover:text-cyan-300" : "text-indigo-600 hover:text-indigo-700"
+        className={`relative mt-4 inline-flex items-center gap-1 text-sm font-medium text-(--accent-color1) ${
+          isGray ? " hover:text-cyan-300" : " hover:text-indigo-700"
         }`}
       >
         View page

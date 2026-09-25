@@ -6,6 +6,8 @@ import {
   Calendar,
   ChevronDown,
   ChevronsRight,
+  Code2,
+  Container,
   CreditCard,
   GalleryHorizontal,
   Info,
@@ -20,6 +22,7 @@ import {
   Rows3,
   Search,
   ShieldCheck,
+  Smartphone,
   Star,
   SunMoon,
   Table2,
@@ -27,6 +30,7 @@ import {
   Wifi,
 } from "lucide-react";
 import { useState } from "react";
+import DocsCard from "./DocsCard";
 import FeatureCard from "./FeatureCard";
 
 // Every entry here becomes its own dedicated page later (see suggested routes).
@@ -60,6 +64,33 @@ export const features = [
 
 const FILTERS = ["All", "UI", "Forms", "Data", "MERN"];
 
+const docsCards = [
+  {
+    icon: Smartphone,
+    title: "React Native Docs",
+    tag: "Mobile",
+    path: "/react-native/setup-commands",
+    description:
+      "Navigation, bottom sheets, tab patterns, refresh logic, and reusable UI helpers for mobile app flows.",
+  },
+  {
+    icon: Code2,
+    title: "React Docs",
+    tag: "Frontend",
+    path: "/",
+    description:
+      "Core React patterns, component architecture, hooks, and app structure examples for modern frontends.",
+  },
+  {
+    icon: Container,
+    title: "Docker Docs",
+    tag: "DevOps",
+    path: "/docker/quick-setup",
+    description:
+      "Container workflows, deployment basics, environment setup, and service orchestration notes for projects.",
+  },
+];
+
 const FeaturesShowcase = ({ isGray }) => {
   const [filter, setFilter] = useState("All");
 
@@ -71,20 +102,17 @@ const FeaturesShowcase = ({ isGray }) => {
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-2xl text-center">
           <span
-            className={`font-mono text-xs uppercase tracking-widest ${
-              isGray ? "text-cyan-400" : "text-indigo-600"
-            }`}
+            className={`font-mono text-xs uppercase tracking-widest ${isGray ? "text-cyan-400" : "text-indigo-600"
+              }`}
           >
             01 / The Catalogue
           </span>
           <h2
-            className={`mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl ${
-              isGray ? "text-slate-50" : "text-slate-900"
-            }`}
+            className={`mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl text-(--primary-text)`}
           >
             One feature. One page. One pattern.
           </h2>
-          <p className={`mt-3 text-sm sm:text-base ${isGray ? "text-slate-400" : "text-slate-600"}`}>
+          <p className={`mt-3 text-sm sm:text-base text-(--secondary-text)`}>
             Each card below links to a standalone page with full, working,
             beginner-friendly code you can copy straight into your own MERN app.
           </p>
@@ -96,15 +124,14 @@ const FeaturesShowcase = ({ isGray }) => {
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                filter === f
+              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${filter === f ? "" : "text-(--secondary-text)"} ${filter === f
                   ? isGray
-                    ? "bg-gradient-to-r from-cyan-500 to-violet-600 text-white"
-                    : "bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white"
+                    ? "bg-linear-to-r from-cyan-500 to-violet-600 text-white"
+                    : "bg-linear-to-r from-indigo-600 to-fuchsia-600 text-white"
                   : isGray
-                  ? "bg-slate-900 text-slate-400 hover:text-slate-200"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-              }`}
+                    ? "bg-slate-900 hover:text-slate-200"
+                    : "bg-slate-100 hover:bg-slate-200"
+                }`}
             >
               {f}
             </button>
@@ -119,6 +146,25 @@ const FeaturesShowcase = ({ isGray }) => {
             <FeatureCard key={feature.id} {...feature} isGray={isGray} index={i} />
           ))}
         </motion.div>
+
+        <div className="mt-12">
+          <div className="mb-5 flex items-center justify-between gap-3">
+            <div>
+              <span className="font-mono text-xs uppercase tracking-widest text-(--accent-color1)">
+                02 / Documentation
+              </span>
+              <h3 className="mt-2 text-2xl font-bold tracking-tight text-(--primary-text)">
+                Explore doc hubs
+              </h3>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {docsCards.map((doc, index) => (
+              <DocsCard key={doc.title} {...doc} index={index} />
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

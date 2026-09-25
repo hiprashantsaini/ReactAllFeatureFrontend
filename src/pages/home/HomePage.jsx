@@ -1,15 +1,15 @@
 
 import { useSelector } from "react-redux";
-import Navbar from "../../components/common/Navbar";
 import Footer from "../../components/common/Footer";
-import HeroSection from "../../components/home/HeroSection";
-import StatsSection from "../../components/home/StatsSection";
-import HowItWorks from "../../components/home/HowItWorks";
-import WhyChooseUs from "../../components/home/WhyChooseUs";
-import PricingAccess from "../../components/home/PricingAccess";
-import Testimonials from "../../components/home/Testimonials";
+import Navbar from "../../components/common/Navbar";
 import CTASection from "../../components/home/CTASection";
 import FeaturesShowcase from "../../components/home/FeaturesShowcase";
+import HeroSection from "../../components/home/HeroSection";
+import HowItWorks from "../../components/home/HowItWorks";
+import PricingAccess from "../../components/home/PricingAccess";
+import StatsSection from "../../components/home/StatsSection";
+import Testimonials from "../../components/home/Testimonials";
+import WhyChooseUs from "../../components/home/WhyChooseUs";
 
 /**
  * HomePage
@@ -35,7 +35,7 @@ const HomePage = () => {
 
   return (
     <div
-      className={`min-h-screen w-full transition-colors duration-500 ${
+      className={`min-h-screen w-full transition-colors duration-500 relative ${
         isGray
           ? "bg-slate-950 text-slate-100"
           : "bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900"
