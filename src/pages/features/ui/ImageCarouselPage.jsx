@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import { GalleryHorizontal, Code2, Image, Sparkles } from "lucide-react";
-import Navbar from "../../../components/common/Navbar";
+import { Code2, GalleryHorizontal, Image, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import CodeAccessModal from "../../../components/common/CodeAccessModal";
 import CodeToggleSection from "../../../components/common/CodeToggleSection";
-import SimpleCarousel from "../../../components/features/ui/imageCarousel/SimpleCarousel";
+import Footer from "../../../components/common/Footer";
+import Navbar from "../../../components/common/Navbar";
 import AdvancedCarousel from "../../../components/features/ui/imageCarousel/AdvancedCarousel";
 import PackageCarousel from "../../../components/features/ui/imageCarousel/PackageCarousel";
-import Footer from "../../../components/common/Footer";
-import CodeAccessModal from "../../../components/common/CodeAccessModal";
+import SimpleCarousel from "../../../components/features/ui/imageCarousel/SimpleCarousel";
 
 
 const useCases = ["Hero banners", "Product image galleries", "Testimonial sliders", "Onboarding screens"];
@@ -234,9 +234,16 @@ const PackageCarousel = () => {
 export default PackageCarousel;`;
 
 const ImageCarouselPage = () => {
-  const isGray = useSelector((state) => state.user.isGray);
+  const {isGray,featuresAccess} = useSelector((state) => state.user);
   const [unlocked, setUnlocked] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+
+  useEffect(()=>{
+    if(featuresAccess){
+      console.log(" featuresAccess['image-carousel'] :",featuresAccess['image-carousel'],featuresAccess)
+      setUnlocked(featuresAccess['image-carousel'])
+    }
+  },[featuresAccess])
 
   return (
     <div

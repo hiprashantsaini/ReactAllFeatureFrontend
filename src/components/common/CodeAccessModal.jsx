@@ -1,7 +1,10 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Loader2, Lock, ShieldCheck, X, Zap } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { RAZOR_PAY_TEST_KEY } from "../../../config";
+import { ToastContext } from "../../../context/ToastProvider";
 import api from "../../utilities/axiosInstance";
 
 const plans = [
@@ -33,184 +36,87 @@ const plans = [
  */
 const CodeAccessModal = ({ open, onClose, isGray, featureName, onSelectPlan }) => {
   const [loadingPlan, setLoadingPlan] = useState(null);
+  const { setToast } = useContext(ToastContext);
 
-  // const handleChoose = (planId) => {
-  //   if (loadingPlan) return;
-  //   setLoadingPlan(planId);
-  //   // 🔧 Replace this timeout with a real Razorpay checkout call later:
-  //   // 1. POST /api/payment/order  -> get order id
-  //   // 2. open Razorpay checkout with that order id
-  //   // 3. on success, POST /api/payment/verify -> mark user unlocked
-  //   setTimeout(() => {
-  //     setLoadingPlan(null);
-  //     onSelectPlan(planId);
-  //     onClose();
-  //   }, 1300);
-  // };
+  const { userData } = useSelector((store) => store.user);
+  const navigate = useNavigate();
 
-  //display razorpay
-  // const handlePayment = async (plan) => {
-  //   try {
-  //     const payload = {
-  //       plan: plan.id,
-  //       amount: plan.amount,
-  //       featureId: plan.id === 'single' ? plan.featureId : null,
-  //     }
-
-  //     const response = await api.post("/subscription/create-order", payload)
-
-  //     const order = response.data.order;
-
-  //     console.log("Order of create order :", order);
-
-  //     // Open Razorpay Checkout
-  //     const options = {
-  //       key: RAZOR_PAY_TEST_KEY, // Replace with your Razorpay key_id
-  //       amount: order.amount, // Amount is in currency subunits.
-  //       currency: order.currency,
-  //       name: 'React All Features',
-  //       description: 'Test Transaction',
-  //       order_id: order.id, // This is the order_id created in the backend
-  //       handler: async function (response) {
-  //         const data = {
-  //           orderCreationId: order.id,
-  //           razorpayPaymentId: response.razorpay_payment_id,
-  //           razorpayOrderId: response.razorpay_order_id,
-  //           razorpaySignature: response.razorpay_signature,
-  //           plan: order,
-  //         };
-  //         const result = await api.post("/subscription/verify-payment", data);
-  //         console.log("result verify payment:", result)
-  //       },
-  //       prefill: {
-  //         name: '<name>',
-  //         email: '<email>',
-  //         contact: '9999999999'
-  //       },
-  //       theme: {
-  //         color: '#F37254'
-  //       },
-  //     };
-
-  //     const rzp = new window.Razorpay(options);
-  //     // 👇 add this — you're currently flying blind on errors
-  //     rzp.on("payment.failed", function (response) {
-  //       console.log("Payment failed:", response.error);
-  //     });
-  //     rzp.open();
-  //   } catch (error) {
-  //     console.log("handlePayment error :", error);
-  //   }
-  // }
-
-      function loadScript(src){
-        return new Promise((resolve)=>{
-            const script=document.createElement("script");
-            script.src=src;
-            script.onload=()=>{
-                resolve(true);
-            };
-            script.onerror=()=>{
-                resolve(false);
-            };
-            document.body.appendChild(script);     
-        });
-    };
-
+  // display razorpay
   const handlePayment = async (plan) => {
-  try {
-    const payload = {
-      plan: plan.id,
-      amount: plan.amount,
-      featureId: plan.id === 'single' ? plan.featureId : null,
-    };
-
-            const res=await loadScript(
-            "https://checkout.razorpay.com/v1/checkout.js"
-        );
-
-        if(!res){
-            console.error(`Verify error :${res}`);
-            return;
-        }
-
-    const response = await api.post("/subscription/create-order", payload);
-    const order = response.data.order;
-
-    console.log("✅ Order created:", order);
-    console.log("✅ Key being used:", RAZOR_PAY_TEST_KEY);
-
-    if (!order.id) {
-      console.error("❌ order.id is missing!", order);
-      return;
+    if (!userData) {
+      navigate('/auth')
+      return onClose();
     }
+    try {
+      const payload = {
+        plan: plan.id,
+        amount: plan.amount,
+        featureId: plan.id === 'single' ? plan.featureId : null,
+      }
 
-    if (!RAZOR_PAY_TEST_KEY) {
-      console.error("❌ Razorpay key is undefined!");
-      return;
-    }
+      const response = await api.post("/subscription/create-order", payload)
 
-    const options = {
-      key: RAZOR_PAY_TEST_KEY,
-      amount: order.amount,
-      currency: order.currency,
-      name: 'React All Features',
-      description: 'Test Transaction',
-      order_id: order.id,
-      handler: async function (response) {
-        console.log("✅ Payment success response:", response);
-        const result = await api.post("/subscription/verify-payment", {
-          orderCreationId: order.id,
-          razorpayPaymentId: response.razorpay_payment_id,
-          razorpayOrderId: response.razorpay_order_id,
-          razorpaySignature: response.razorpay_signature,
-          plan: plan.id,
-        });
-        console.log("✅ Verify result:", result);
-      },
-      modal: {
-        ondismiss: function () {
-          console.log("⚠️ Razorpay modal was closed by user");
+      const order = response.data.order;
+
+      console.log("Order of create order :", order);
+
+      // Open Razorpay Checkout
+      const options = {
+        key: RAZOR_PAY_TEST_KEY, // Replace with your Razorpay key_id
+        amount: order.amount, // Amount is in currency subunits.
+        currency: order.currency,
+        name: 'React All Features',
+        description: 'Test Transaction',
+        order_id: order.id, // This is the order_id created in the backend
+        handler: async function (response) {
+          console.log("HANDLER FIRED");
+          console.log("Razorpay response:", response);
+
+          try {
+            const data = {
+              orderCreationId: order.id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+              plan: order,
+            };
+            const result = await api.post(
+              "/subscription/verify-payment",
+              data
+            );
+
+            if (result.data.success) {
+              setToast({ type: "success", message: result.data.message || "Feature activated", position: "top-center" });
+              onClose();
+            }
+
+            console.log(result.data);
+          } catch (err) {
+            console.log("Verify error:", err);
+          }
         },
-        escape: false,
-        confirm_close: true,
-      },
-      prefill: {
-        name: 'Test User',
-        email: 'test@gmail.com',
-        contact: '9999999999',
-      },
-      theme: { color: '#F37254' },
-    };
+        prefill: {
+          name: '<name>',
+          email: '<email>',
+          contact: '9999999999'
+        },
+        theme: {
+          color: '#F37254'
+        },
+      };
 
-    console.log("✅ Razorpay options:", options);
-    console.log("✅ Razorpay options:", options);
-
-// 👇 add these two lines right after
-console.log("window.Razorpay:", window.Razorpay);
-console.log("typeof window.Razorpay:", typeof window.Razorpay);
-
-    if (!window.Razorpay) {
-      console.error("❌ window.Razorpay is not loaded! Check your script tag.");
-      return;
+      const rzp = new window.Razorpay(options);
+      // 👇 add this — you're currently flying blind on errors
+      rzp.on("payment.failed", function (response) {
+        console.log("Payment failed:", response.error);
+      });
+      rzp.open();
+    } catch (error) {
+      console.log("handlePayment error :", error);
     }
-
-    const rzp = new window.Razorpay(options);
-
-    rzp.on("payment.failed", function (response) {
-      console.error("❌ Payment failed:");
-      console.error("Code:", response.error.code);
-      console.error("Description:", response.error.description);
-      console.error("Reason:", response.error.reason);
-      console.error("Full error:", response.error);
-    });
-
-    rzp.open();
-
-  } catch (error) {
-    console.error("❌ handlePayment crashed:", error);
   }
-};
+
+
   return (
     <AnimatePresence>
       {open && (

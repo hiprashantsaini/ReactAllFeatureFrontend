@@ -5,6 +5,7 @@ const userSlice = createSlice({
     initialState:{
         isGray:false,
         userData:null,
+        featuresAccess:{}//key:featureId, value:true/false
     },
     reducers:{
         toggleTheme:(state,action)=>{
@@ -15,10 +16,18 @@ const userSlice = createSlice({
         },
         clearUserData:(state,action)=>{
             state.userData = null;
+        },
+        setFeatureAccess:(state,action)=>{
+            const featureId=action.payload;
+            state.featuresAccess[featureId]=true;
+        },
+        removeFeatureAccess:(state,action)=>{
+            const featureId=action.payload;
+            delete state.featuresAccess[featureId];
         }
     }
 });
 
-export const {toggleTheme, setUserData, clearUserData} = userSlice.actions;
+export const {toggleTheme, setUserData, clearUserData,setFeatureAccess,removeFeatureAccess} = userSlice.actions;
 
 export default userSlice.reducer;

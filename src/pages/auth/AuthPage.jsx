@@ -1,12 +1,12 @@
+import { motion } from "framer-motion";
+import { Code2, KeyRound, MonitorSmartphone, ShieldCheck, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { motion } from "framer-motion";
-import { KeyRound, Code2, ShieldCheck, Sparkles, MonitorSmartphone } from "lucide-react";
-import Navbar from "../../components/common/Navbar";
 import AuthCard from "../../components/auth/AuthCard";
+import CodeAccessModal from "../../components/common/CodeAccessModal";
 import CodeBlock from "../../components/common/CodeBlock";
 import Footer from "../../components/common/Footer";
-import CodeAccessModal from "../../components/common/CodeAccessModal";
+import Navbar from "../../components/common/Navbar";
 
 const useCases = ["Protected dashboards", "User profiles", "E-commerce checkout", "Admin panels"];
 
@@ -130,19 +130,18 @@ router.post("/google", async (req, res) => {
 
 module.exports = router;`;
 
-const AuthPage = ({demo=false}) => {
+const AuthPage = ({ demo = false }) => {
   const isGray = useSelector((state) => state.user.isGray);
   const [unlocked, setUnlocked] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-    useEffect(()=>{
-   window.scrollTo(0,0);
-  },[]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div
-      className={`min-h-screen w-full transition-colors duration-500 ${
-        isGray ? "bg-slate-950 text-slate-100" : "bg-slate-50 text-slate-900"
-      }`}
+      className={`min-h-screen w-full transition-colors duration-500 ${isGray ? "bg-slate-950 text-slate-100" : "bg-slate-50 text-slate-900"
+        }`}
     >
       <Navbar isGray={isGray} />
 
@@ -150,14 +149,13 @@ const AuthPage = ({demo=false}) => {
         {/* <PageBreadcrumb isGray={isGray} current="Auth: Login & Signup" /> */}
 
         {/* header */}
- { demo &&  <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
+        {demo && <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
           <div className="flex items-center gap-3">
             <span
-              className={`flex h-12 w-12 items-center justify-center rounded-2xl ${
-                isGray
+              className={`flex h-12 w-12 items-center justify-center rounded-2xl ${isGray
                   ? "bg-gradient-to-br from-cyan-500/20 to-violet-600/20 text-cyan-300"
                   : "bg-gradient-to-br from-indigo-100 to-fuchsia-100 text-indigo-600"
-              }`}
+                }`}
             >
               <KeyRound size={22} />
             </span>
@@ -173,11 +171,10 @@ const AuthPage = ({demo=false}) => {
 
           <button
             onClick={() => setModalOpen(true)}
-            className={`flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 ${
-              isGray
-                ? "bg-gradient-to-r from-cyan-500 to-violet-600"
-                : "bg-gradient-to-r from-indigo-600 to-fuchsia-600"
-            }`}
+            className={`flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 ${isGray
+                ? "bg-linear-to-r from-cyan-500 to-violet-600"
+                : "bg-linear-to-r from-indigo-600 to-fuchsia-600"
+              }`}
           >
             <Code2 size={16} />
             {unlocked ? "Code Unlocked" : "Get Code"}
@@ -185,13 +182,12 @@ const AuthPage = ({demo=false}) => {
         </div>}
 
         {/* definition */}
-      {demo &&  <motion.section
+        {demo && <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className={`mt-8 rounded-2xl border p-6 ${
-            isGray ? "border-slate-800 bg-slate-900/60" : "border-slate-200 bg-white"
-          }`}
+          className={`mt-8 rounded-2xl border p-6 ${isGray ? "border-slate-800 bg-slate-900/60" : "border-slate-200 bg-white"
+            }`}
         >
           <h2 className={`flex items-center gap-2 text-sm font-semibold uppercase tracking-wide ${isGray ? "text-cyan-400" : "text-indigo-600"}`}>
             <ShieldCheck size={15} />
@@ -203,7 +199,7 @@ const AuthPage = ({demo=false}) => {
             (JSON Web Token): after a successful login, the server signs a small token
             and sends it back — the browser stores it and attaches it to future
             requests instead of sending the password every time. <strong>Google
-            sign-in</strong> skips the password entirely by letting Google vouch for
+              sign-in</strong> skips the password entirely by letting Google vouch for
             the user's identity instead.
           </p>
 
@@ -211,9 +207,8 @@ const AuthPage = ({demo=false}) => {
             {useCases.map((u) => (
               <span
                 key={u}
-                className={`rounded-full px-3 py-1 text-xs font-medium ${
-                  isGray ? "bg-slate-800 text-slate-300" : "bg-slate-100 text-slate-600"
-                }`}
+                className={`rounded-full px-3 py-1 text-xs font-medium ${isGray ? "bg-slate-800 text-slate-300" : "bg-slate-100 text-slate-600"
+                  }`}
               >
                 {u}
               </span>
@@ -223,7 +218,7 @@ const AuthPage = ({demo=false}) => {
 
         {/* live demo */}
         <section className="mt-8">
-         {demo &&  <h2 className={`mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide ${isGray ? "text-cyan-400" : "text-indigo-600"}`}>
+          {demo && <h2 className={`mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide ${isGray ? "text-cyan-400" : "text-indigo-600"}`}>
             <MonitorSmartphone size={15} />
             Live Preview
           </h2>}
@@ -234,7 +229,7 @@ const AuthPage = ({demo=false}) => {
         </section>
 
         {/* code */}
-       {demo && <section className="mt-8">
+        {demo && <section className="mt-8">
           <div className="mb-3 flex items-center justify-between">
             <h2 className={`flex items-center gap-2 text-sm font-semibold uppercase tracking-wide ${isGray ? "text-cyan-400" : "text-indigo-600"}`}>
               <Sparkles size={15} />
