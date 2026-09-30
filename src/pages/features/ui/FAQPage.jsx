@@ -5,7 +5,7 @@ import {
   Layers,
   Sparkles,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import CodeAccessModal from "../../../components/common/CodeAccessModal";
@@ -18,10 +18,16 @@ import SimpleAccordion from "../../../components/features/ui/faq/SimpleAccordion
 import RawSimpleFaq from "../../../components/features/ui/faq/SimpleFAQPage?raw"; //To take as text. With backtick there was coming error because of inner backtick
 
 const AccordionOrFaqPage = () => {
-  const isGray = useSelector((state) => state.user.isGray);
+  const {isGray,featuresAccess} = useSelector((state) => state.user);
   const [unlocked, setUnlocked] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-
+  const featureId = "accordion";
+  useEffect(()=>{
+    if(featuresAccess){
+      console.log(" featuresAccess[featureId] :",featuresAccess[featureId],featuresAccess)
+      setUnlocked(featuresAccess[featureId])
+    }
+  },[featuresAccess])
   return (
     <div
       className={`min-h-screen w-full transition-colors duration-500 ${
@@ -224,6 +230,7 @@ const AccordionOrFaqPage = () => {
         onClose={() => setModalOpen(false)}
         isGray={isGray}
         featureName="Accordion / FAQ"
+        featureId={featureId}
         onSelectPlan={() => setUnlocked(true)}
       />
     </div>

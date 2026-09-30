@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import { LayoutPanelTop, Code2, Layers, Sparkles, MonitorSmartphone } from "lucide-react";
-import Navbar from "../../../components/common/Navbar";
-import TabsDemo from "../../../components/features/ui/tabs/TabsDemo";
+import { Code2, Layers, LayoutPanelTop, MonitorSmartphone, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import CodeAccessModal from "../../../components/common/CodeAccessModal";
 import CodeBlock from "../../../components/common/CodeBlock";
 import Footer from "../../../components/common/Footer";
-import CodeAccessModal from "../../../components/common/CodeAccessModal";
+import Navbar from "../../../components/common/Navbar";
+import TabsDemo from "../../../components/features/ui/tabs/TabsDemo";
 
 
 const useCases = ["Settings pages", "Product detail pages", "Dashboard panels", "Documentation sections"];
@@ -125,15 +125,21 @@ const Tabs = () => {
 export default Tabs;`;
 
 const TabsPage = () => {
-  const isGray = useSelector((state) => state.user.isGray);
+  const { isGray, featuresAccess } = useSelector((state) => state.user);
   const [unlocked, setUnlocked] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const featureId = "tabs";
+
+  useEffect(() => {
+    if (featuresAccess) {
+      setUnlocked(featuresAccess[featureId])
+    }
+  }, [featuresAccess])
 
   return (
     <div
-      className={`min-h-screen w-full transition-colors duration-500 ${
-        isGray ? "bg-slate-950 text-slate-100" : "bg-slate-50 text-slate-900"
-      }`}
+      className={`min-h-screen w-full transition-colors duration-500 ${isGray ? "bg-slate-950 text-slate-100" : "bg-slate-50 text-slate-900"
+        }`}
     >
       <Navbar isGray={isGray} />
 
@@ -144,11 +150,10 @@ const TabsPage = () => {
         <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
           <div className="flex items-center gap-3">
             <span
-              className={`flex h-12 w-12 items-center justify-center rounded-2xl ${
-                isGray
+              className={`flex h-12 w-12 items-center justify-center rounded-2xl ${isGray
                   ? "bg-gradient-to-br from-cyan-500/20 to-violet-600/20 text-cyan-300"
                   : "bg-gradient-to-br from-indigo-100 to-fuchsia-100 text-indigo-600"
-              }`}
+                }`}
             >
               <LayoutPanelTop size={22} />
             </span>
@@ -164,11 +169,10 @@ const TabsPage = () => {
 
           <button
             onClick={() => setModalOpen(true)}
-            className={`flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 ${
-              isGray
+            className={`flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 ${isGray
                 ? "bg-gradient-to-r from-cyan-500 to-violet-600"
                 : "bg-gradient-to-r from-indigo-600 to-fuchsia-600"
-            }`}
+              }`}
           >
             <Code2 size={16} />
             {unlocked ? "Code Unlocked" : "Get Code"}
@@ -180,9 +184,8 @@ const TabsPage = () => {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className={`mt-8 rounded-2xl border p-6 ${
-            isGray ? "border-slate-800 bg-slate-900/60" : "border-slate-200 bg-white"
-          }`}
+          className={`mt-8 rounded-2xl border p-6 ${isGray ? "border-slate-800 bg-slate-900/60" : "border-slate-200 bg-white"
+            }`}
         >
           <h2 className={`flex items-center gap-2 text-sm font-semibold uppercase tracking-wide ${isGray ? "text-cyan-400" : "text-indigo-600"}`}>
             <Layers size={15} />
@@ -199,9 +202,8 @@ const TabsPage = () => {
             {useCases.map((u) => (
               <span
                 key={u}
-                className={`rounded-full px-3 py-1 text-xs font-medium ${
-                  isGray ? "bg-slate-800 text-slate-300" : "bg-slate-100 text-slate-600"
-                }`}
+                className={`rounded-full px-3 py-1 text-xs font-medium ${isGray ? "bg-slate-800 text-slate-300" : "bg-slate-100 text-slate-600"
+                  }`}
               >
                 {u}
               </span>
@@ -254,6 +256,7 @@ const TabsPage = () => {
         onClose={() => setModalOpen(false)}
         isGray={isGray}
         featureName="Tabs"
+        featureId={featureId}
         onSelectPlan={() => setUnlocked(true)}
       />
     </div>

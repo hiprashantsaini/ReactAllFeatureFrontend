@@ -1,10 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Loader2, Lock, ShieldCheck, X, Zap } from "lucide-react";
 import { useContext, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RAZOR_PAY_TEST_KEY } from "../../../config";
 import { ToastContext } from "../../../context/ToastProvider";
+import { setFeatureAccess } from "../../redux/userSlice";
 import api from "../../utilities/axiosInstance";
 
 const plans = [
@@ -34,12 +35,13 @@ const plans = [
  * and then unlocks the code block — swap `handleChoose` for a real
  * Razorpay order + verify flow when you wire up payments.
  */
-const CodeAccessModal = ({ open, onClose, isGray, featureName, onSelectPlan }) => {
+const CodeAccessModal = ({ open, onClose, isGray, featureName, featureId, onSelectPlan }) => {
   const [loadingPlan, setLoadingPlan] = useState(null);
   const { setToast } = useContext(ToastContext);
 
   const { userData } = useSelector((store) => store.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // display razorpay
   const handlePayment = async (plan) => {
@@ -87,6 +89,16 @@ const CodeAccessModal = ({ open, onClose, isGray, featureName, onSelectPlan }) =
 
             if (result.data.success) {
               setToast({ type: "success", message: result.data.message || "Feature activated", position: "top-center" });
+              dispatch({ type: "user/setUserData", payload: result.data.user });
+              const userData = result.data.user;
+              if (userData.subscriptions?.length) {
+                const singleSubscription = userData.subscriptions.find((s) => s.plan === 'single');
+                if (singleSubscription && singleSubscription.features?.length) {
+                  singleSubscription.features.forEach((element) => {
+                    dispatch(setFeatureAccess(element.featureId))
+                  });
+                }
+              }
               onClose();
             }
 
@@ -205,8 +217,7 @@ const CodeAccessModal = ({ open, onClose, isGray, featureName, onSelectPlan }) =
                   </ul>
 
                   <button
-                    // onClick={() => handleChoose(plan.id)}
-                    onClick={() => handlePayment({ ...plan, featureId: 'image-carousel' })}
+                    onClick={() => handlePayment({ ...plan, featureId: featureId })}
                     disabled={!!loadingPlan}
                     className={`mt-5 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.03] disabled:opacity-70 ${plan.highlighted
                       ? isGray

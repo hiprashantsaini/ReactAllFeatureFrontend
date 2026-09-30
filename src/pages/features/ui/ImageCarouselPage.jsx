@@ -237,11 +237,11 @@ const ImageCarouselPage = () => {
   const {isGray,featuresAccess} = useSelector((state) => state.user);
   const [unlocked, setUnlocked] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const featureId = "image-carousel";
 
   useEffect(()=>{
     if(featuresAccess){
-      console.log(" featuresAccess['image-carousel'] :",featuresAccess['image-carousel'],featuresAccess)
-      setUnlocked(featuresAccess['image-carousel'])
+      setUnlocked(featuresAccess[featureId])
     }
   },[featuresAccess])
 
@@ -375,6 +375,7 @@ const ImageCarouselPage = () => {
         onClose={() => setModalOpen(false)}
         isGray={isGray}
         featureName="Image Carousel"
+        featureId={featureId}
         onSelectPlan={() => setUnlocked(true)}
       />
     </div>

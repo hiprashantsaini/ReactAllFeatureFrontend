@@ -116,6 +116,16 @@ const ReactNativeLayout = () => {
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
+  useEffect(() => {
+    const element = scrollRef.current;
+
+    if (!element) return;
+
+    element.scrollTo({
+      top: 0,
+      behavior: "smooth", // optional
+    });
+  }, [location.pathname]);
   return (
     <div className="flex h-screen flex-col bg-(--primary-bg) text-(--primary-text) transition-colors duration-300 overflow-hidden">
       <header className="sticky top-0 z-50 shrink-0 border-b border-(--primary-border) bg-(--secondary-bg) backdrop-blur-xl">
@@ -140,7 +150,7 @@ const ReactNativeLayout = () => {
                   React Native Docs
                 </div>
 
-                <BackToHomeBtn/>
+                <BackToHomeBtn />
               </div>
             </div>
           </div>
@@ -185,11 +195,10 @@ const ReactNativeLayout = () => {
                     key={to}
                     to={to}
                     aria-current={isActive ? "page" : undefined}
-                    className={`flex items-center justify-between rounded-lg border px-3 py-2.5 text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 hover:border-(--accent-color1)/60 hover:bg-(--primary-bg) hover:text-(--primary-text) ${
-                      isActive
+                    className={`flex items-center justify-between rounded-lg border px-3 py-2.5 text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 hover:border-(--accent-color1)/60 hover:bg-(--primary-bg) hover:text-(--primary-text) ${isActive
                         ? "border-(--accent-color1)/50 bg-(--primary-bg) text-(--primary-text) shadow-sm"
                         : "border-(--primary-border) bg-(--secondary-bg) text-(--accent-color1)"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-2">
                       <Icon size={15} />
@@ -241,11 +250,10 @@ const ReactNativeLayout = () => {
                       to={to}
                       onClick={closeMobileMenu}
                       aria-current={isActive ? "page" : undefined}
-                      className={`flex items-center justify-between rounded-lg border px-3 py-2.5 text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 hover:border-(--accent-color1)/60 hover:bg-(--primary-bg) hover:text-(--primary-text) ${
-                        isActive
+                      className={`flex items-center justify-between rounded-lg border px-3 py-2.5 text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 hover:border-(--accent-color1)/60 hover:bg-(--primary-bg) hover:text-(--primary-text) ${isActive
                           ? "border-(--accent-color1)/50 bg-(--primary-bg) text-(--primary-text) shadow-sm"
                           : "border-(--primary-border) bg-(--primary-bg) text-(--accent-color1)"
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center gap-2">
                         <Icon size={15} />

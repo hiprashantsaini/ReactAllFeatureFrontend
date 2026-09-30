@@ -151,7 +151,7 @@ const AuthCard = ({ isGray }) => {
           setToast({ type: "success", message: res.data.message || "Signed in with Google", position: "top-center" });
           setSuccess(true);
           dispatch(setUserData(res.data.user));
-          localStorage.setItem("rafAccessToken",res.data.token);
+          localStorage.setItem("rafAccessToken", res.data.token);
           navigate("/");
           setForm({ name: "", email: "", password: "" });
           return;
@@ -185,16 +185,16 @@ const AuthCard = ({ isGray }) => {
           setLoading(false);
           setSuccess(true);
           dispatch(setUserData(res.data.user));
-          const userData=res.data.user;
-          if(userData.subscriptions?.length){
-            const singleSubscription = userData.subscriptions.find((s)=>s.plan === 'single');
-            if(singleSubscription && singleSubscription.features?.length){
+          const userData = res.data.user;
+          if (userData.subscriptions?.length) {
+            const singleSubscription = userData.subscriptions.find((s) => s.plan === 'single');
+            if (singleSubscription && singleSubscription.features?.length) {
               singleSubscription.features.forEach((element) => {
                 dispatch(setFeatureAccess(element.featureId))
               });
             }
           }
-          localStorage.setItem("rafAccessToken",res.data.token);
+          localStorage.setItem("rafAccessToken", res.data.token);
           navigate("/")
           setForm({ name: "", email: "", password: "" });
           return;
@@ -234,6 +234,15 @@ const AuthCard = ({ isGray }) => {
         setOtpMessage("");
         setSuccess(true);
         dispatch(setUserData(res.data.user));
+        const userData = res.data.user;
+        if (userData.subscriptions?.length) {
+          const singleSubscription = userData.subscriptions.find((s) => s.plan === 'single');
+          if (singleSubscription && singleSubscription.features?.length) {
+            singleSubscription.features.forEach((element) => {
+              dispatch(setFeatureAccess(element.featureId))
+            });
+          }
+        }
         navigate("/")
         setForm({ name: "", email: "", password: "" });
       }

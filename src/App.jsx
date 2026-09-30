@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Provider, useSelector } from 'react-redux'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import ToastProvider from '../context/ToastProvider.jsx'
+import CommonLayout from './components/CommonLayout.jsx'
 import AuthPage from './pages/auth/AuthPage.jsx'
 import DockerLayout from './pages/dockerDocs/DockerLayout.jsx'
 import QuickSetup from './pages/dockerDocs/quickSetup/QuickSetup.jsx'
@@ -56,10 +57,15 @@ const App = () => {
     },
     {
       path: '/',
-      element: <HomePage />
+      element: <CommonLayout />,
+      children:[{
+        path:'',
+        element:<HomePage/>
+      }]
     },
     {
       path: "/features",
+      element:<CommonLayout/>,
       children: [
         {
           path: 'image-carousel',
@@ -169,11 +175,9 @@ const App = () => {
 
   return (
     <div className="custom-scrollbar">
-      <Provider store={appStore}>
         <ToastProvider>
           <RouterProvider router={appRoutes} />
         </ToastProvider>
-      </Provider>
     </div>
   )
 }
