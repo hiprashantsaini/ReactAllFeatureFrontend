@@ -35,7 +35,8 @@ const Navbar = ({ isGray }) => {
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <img src={isGray ? "/logoDark.png" : "/logoLight.png"} className="h-10" />
+          {/* <img src={isGray ? "/logoDark.png" : "/logoLight.png"} className="h-10" /> */}
+          <img src={isGray ? "/logo-gray.png" : "/logo-light.png"} className="h-10" />
         </Link>
 
         {/* Desktop links */}

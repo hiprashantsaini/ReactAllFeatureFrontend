@@ -16,6 +16,7 @@ const userSlice = createSlice({
         },
         clearUserData:(state,action)=>{
             state.userData = null;
+            state.featuresAccess = {};
         },
         setFeatureAccess:(state,action)=>{
             const featureId=action.payload;
