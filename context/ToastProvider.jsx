@@ -77,8 +77,6 @@ const ToastProvider = ({ children }) => {
     }
   }, [])
 
-  console.log("isGray in ToastProvider:", isGray); // Debugging line to check the value of isGray
-
   // const toastStyles = {
   //   success: {
   //     icon: "✅",
