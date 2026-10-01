@@ -1,12 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Loader2, Lock, ShieldCheck, X, Zap } from "lucide-react";
-import { useContext, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { RAZOR_PAY_TEST_KEY } from "../../../config";
-import { ToastContext } from "../../../context/ToastProvider";
-import { setFeatureAccess } from "../../redux/userSlice";
-import api from "../../utilities/axiosInstance";
+import useHandleRazorpayPayment from "../../hook/useHandleRazorpayPayment";
+import CommonLoader from "./CommonLoader";
 
 const plans = [
   {
@@ -36,101 +31,15 @@ const plans = [
  * Razorpay order + verify flow when you wire up payments.
  */
 const CodeAccessModal = ({ open, onClose, isGray, featureName, featureId, onSelectPlan }) => {
-  const [loadingPlan, setLoadingPlan] = useState(null);
-  const { setToast } = useContext(ToastContext);
-
-  const { userData } = useSelector((store) => store.user);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  // display razorpay
-  const handlePayment = async (plan) => {
-    if (!userData) {
-      navigate('/auth')
-      return onClose();
-    }
-    try {
-      const payload = {
-        plan: plan.id,
-        amount: plan.amount,
-        featureId: plan.id === 'single' ? plan.featureId : null,
-      }
-
-      const response = await api.post("/subscription/create-order", payload)
-
-      const order = response.data.order;
-
-      console.log("Order of create order :", order);
-
-      // Open Razorpay Checkout
-      const options = {
-        key: RAZOR_PAY_TEST_KEY, // Replace with your Razorpay key_id
-        amount: order.amount, // Amount is in currency subunits.
-        currency: order.currency,
-        name: 'React All Features',
-        description: 'Test Transaction',
-        order_id: order.id, // This is the order_id created in the backend
-        handler: async function (response) {
-          console.log("HANDLER FIRED");
-          console.log("Razorpay response:", response);
-
-          try {
-            const data = {
-              orderCreationId: order.id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature,
-              plan: order,
-            };
-            const result = await api.post(
-              "/subscription/verify-payment",
-              data
-            );
-
-            if (result.data.success) {
-              setToast({ type: "success", message: result.data.message || "Feature activated", position: "top-center" });
-              dispatch({ type: "user/setUserData", payload: result.data.user });
-              const userData = result.data.user;
-              if (userData.subscriptions?.length) {
-                const singleSubscription = userData.subscriptions.find((s) => s.plan === 'single');
-                if (singleSubscription && singleSubscription.features?.length) {
-                  singleSubscription.features.forEach((element) => {
-                    dispatch(setFeatureAccess(element.featureId))
-                  });
-                }
-              }
-              onClose();
-            }
-
-            console.log(result.data);
-          } catch (err) {
-            console.log("Verify error:", err);
-          }
-        },
-        prefill: {
-          name: '<name>',
-          email: '<email>',
-          contact: '9999999999'
-        },
-        theme: {
-          color: '#F37254'
-        },
-      };
-
-      const rzp = new window.Razorpay(options);
-      // 👇 add this — you're currently flying blind on errors
-      rzp.on("payment.failed", function (response) {
-        console.log("Payment failed:", response.error);
-      });
-      rzp.open();
-    } catch (error) {
-      console.log("handlePayment error :", error);
-    }
-  }
-
+  const {
+    handlePayment,
+    loadingPlan
+  } = useHandleRazorpayPayment({ onClose });
 
   return (
     <AnimatePresence>
+    
+     <CommonLoader show={loadingPlan} />
       {open && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -217,7 +126,7 @@ const CodeAccessModal = ({ open, onClose, isGray, featureName, featureId, onSele
                   </ul>
 
                   <button
-                    onClick={() => handlePayment({ ...plan, featureId: featureId })}
+                    onClick={() => handlePayment({ ...plan, featureId:plan.id === "pro" ? 'pro' : featureId })}
                     disabled={!!loadingPlan}
                     className={`mt-5 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.03] disabled:opacity-70 ${plan.highlighted
                       ? isGray

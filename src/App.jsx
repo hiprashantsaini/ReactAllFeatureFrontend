@@ -20,6 +20,7 @@ import ProfilePage from './pages/profile/ProfilePage.jsx'
 import BottomSheetDocs from './pages/reactNativeNotes/BottomSheetDocs.jsx'
 import BottomTabsDocs from './pages/reactNativeNotes/BottomTabsDocs.jsx'
 import BuildCommands from './pages/reactNativeNotes/BuildCommands.jsx'
+import FontSetupAndUse from './pages/reactNativeNotes/FontSetupAndUse.jsx'
 import ImageViewerDocs from './pages/reactNativeNotes/ImageViewerDocs.jsx'
 import NavigationSetupDocs from './pages/reactNativeNotes/NavigationSetupDocs.jsx'
 import ReactNativeLayout from './pages/reactNativeNotes/ReactNativeLayout.jsx'
@@ -58,14 +59,14 @@ const App = () => {
     {
       path: '/',
       element: <CommonLayout />,
-      children:[{
-        path:'',
-        element:<HomePage/>
+      children: [{
+        path: '',
+        element: <HomePage />
       }]
     },
     {
       path: "/features",
-      element:<CommonLayout/>,
+      element: <CommonLayout />,
       children: [
         {
           path: 'image-carousel',
@@ -112,6 +113,10 @@ const App = () => {
         {
           path: "setup-commands",
           element: <SetupCommands />,
+        },
+        {
+          path: "font-setup-and-use",
+          element: <FontSetupAndUse />,
         },
         {
           path: "build-commands",
@@ -175,9 +180,9 @@ const App = () => {
 
   return (
     <div className="custom-scrollbar">
-        <ToastProvider>
-          <RouterProvider router={appRoutes} />
-        </ToastProvider>
+      <ToastProvider>
+        <RouterProvider router={appRoutes} />
+      </ToastProvider>
     </div>
   )
 }

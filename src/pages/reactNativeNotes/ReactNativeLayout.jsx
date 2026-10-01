@@ -13,6 +13,7 @@ import {
   Smartphone,
   Sparkles,
   SunMoon,
+  Type,
   Waypoints,
   X
 } from "lucide-react";
@@ -28,6 +29,11 @@ const navItems = [
     label: "Setup Commands",
     to: "/react-native/setup-commands",
     icon: Settings2,
+  },
+    {
+    label: "Font Setup and Use",
+    to: "/react-native/font-setup-and-use",
+    icon: Type,
   },
   {
     label: "Build Commands",

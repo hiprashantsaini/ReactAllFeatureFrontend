@@ -151,6 +151,17 @@ const AuthCard = ({ isGray }) => {
           setToast({ type: "success", message: res.data.message || "Signed in with Google", position: "top-center" });
           setSuccess(true);
           dispatch(setUserData(res.data.user));
+          const userData = res.data.user;
+          if (userData.subscriptions?.length) {
+            const singleSubscription = userData.subscriptions.find((s) => s.plan === 'single');
+            const proPlan = userData.subscriptions.find((s) => s.plan === 'pro');
+            dispatch(setUserData({ ...userData, hasProAccess: proPlan ? true : false }));
+            if (singleSubscription && singleSubscription.features?.length) {
+              singleSubscription.features.forEach((element) => {
+                dispatch(setFeatureAccess(element.featureId))
+              });
+            }
+          }
           localStorage.setItem("rafAccessToken", res.data.token);
           navigate("/");
           setForm({ name: "", email: "", password: "" });
@@ -188,6 +199,8 @@ const AuthCard = ({ isGray }) => {
           const userData = res.data.user;
           if (userData.subscriptions?.length) {
             const singleSubscription = userData.subscriptions.find((s) => s.plan === 'single');
+            const proPlan = userData.subscriptions.find((s) => s.plan === 'pro');
+            dispatch(setUserData({ ...userData, hasProAccess: proPlan ? true : false }));
             if (singleSubscription && singleSubscription.features?.length) {
               singleSubscription.features.forEach((element) => {
                 dispatch(setFeatureAccess(element.featureId))
@@ -237,6 +250,8 @@ const AuthCard = ({ isGray }) => {
         const userData = res.data.user;
         if (userData.subscriptions?.length) {
           const singleSubscription = userData.subscriptions.find((s) => s.plan === 'single');
+          const proPlan = userData.subscriptions.find((s) => s.plan === 'pro');
+          dispatch(setUserData({ ...userData, hasProAccess: proPlan ? true : false }));
           if (singleSubscription && singleSubscription.features?.length) {
             singleSubscription.features.forEach((element) => {
               dispatch(setFeatureAccess(element.featureId))

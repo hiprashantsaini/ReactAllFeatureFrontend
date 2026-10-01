@@ -1,14 +1,14 @@
 import { motion } from "framer-motion";
 import {
   ChevronDown as AccordionIcon,
-  Code2,
   Layers,
-  Sparkles,
+  Sparkles
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import CodeAccessModal from "../../../components/common/CodeAccessModal";
+import CodeLockUnlockBtn from "../../../components/common/CodeLockUnlockBtn";
 import CodeToggleSection from "../../../components/common/CodeToggleSection";
 import Footer from "../../../components/common/Footer";
 import Navbar from "../../../components/common/Navbar";
@@ -18,16 +18,17 @@ import SimpleAccordion from "../../../components/features/ui/faq/SimpleAccordion
 import RawSimpleFaq from "../../../components/features/ui/faq/SimpleFAQPage?raw"; //To take as text. With backtick there was coming error because of inner backtick
 
 const AccordionOrFaqPage = () => {
-  const {isGray,featuresAccess} = useSelector((state) => state.user);
+  const {isGray,featuresAccess,userData} = useSelector((state) => state.user);
   const [unlocked, setUnlocked] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const featureId = "accordion";
   useEffect(()=>{
-    if(featuresAccess){
-      console.log(" featuresAccess[featureId] :",featuresAccess[featureId],featuresAccess)
+    if(userData && userData.hasProAccess){
+      setUnlocked(true)
+    }else if(featuresAccess){
       setUnlocked(featuresAccess[featureId])
     }
-  },[featuresAccess])
+  },[featuresAccess,userData])
   return (
     <div
       className={`min-h-screen w-full transition-colors duration-500 ${
@@ -63,17 +64,7 @@ const AccordionOrFaqPage = () => {
             </div>
           </div>
 
-          <button
-            onClick={() => setModalOpen(true)}
-            className={`flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 ${
-              isGray
-                ? "bg-gradient-to-r from-cyan-500 to-violet-600"
-                : "bg-gradient-to-r from-indigo-600 to-fuchsia-600"
-            }`}
-          >
-            <Code2 size={16} />
-            {unlocked ? "✓ Code Unlocked" : "Get Code"}
-          </button>
+          <CodeLockUnlockBtn unlocked={unlocked} setModalOpen={setModalOpen} />
         </div>
 
         {/* Definition */}

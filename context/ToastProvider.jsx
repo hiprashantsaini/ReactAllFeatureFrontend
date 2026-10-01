@@ -1,7 +1,7 @@
 import { AlertTriangle, CheckCircle2, Info, X, XCircle } from "lucide-react";
 import { createContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setFeatureAccess } from "../src/redux/userSlice";
+import { setFeatureAccess, setUserData } from "../src/redux/userSlice";
 import api from "../src/utilities/axiosInstance";
 
 export const ToastContext = createContext();
@@ -58,6 +58,8 @@ const ToastProvider = ({ children }) => {
         const userData = res.data.user;
         if (userData.subscriptions?.length) {
           const singleSubscription = userData.subscriptions.find((s) => s.plan === 'single');
+          const proPlan = userData.subscriptions.find((s) => s.plan === 'pro');
+          dispatch(setUserData({ ...userData, hasProAccess: proPlan ? true : false }));
           if (singleSubscription && singleSubscription.features?.length) {
             singleSubscription.features.forEach((element) => {
               dispatch(setFeatureAccess(element.featureId))
@@ -164,8 +166,8 @@ const ToastProvider = ({ children }) => {
         {toast && (
           <div
             className={`flex min-w-[300px] max-w-sm items-start gap-3 rounded-2xl border p-4 shadow-2xl ${isGray
-                ? "border-slate-700 bg-slate-900"
-                : "border-slate-200 bg-white"
+              ? "border-slate-700 bg-slate-900"
+              : "border-slate-200 bg-white"
               }`}
           >
             {/* icon */}

@@ -1,5 +1,8 @@
 import { motion } from "framer-motion";
 import { Check, CreditCard, ShieldCheck, X } from "lucide-react";
+import { useSelector } from "react-redux";
+import useHandleRazorpayPayment from "../../hook/useHandleRazorpayPayment";
+import CommonLoader from "../common/CommonLoader";
 
 const plans = [
   {
@@ -14,8 +17,10 @@ const plans = [
     ],
   },
   {
+    id:"pro",
     name: "Pro Access",
     price: "₹499",
+    amount: 49900,
     note: "One-time payment",
     highlighted: true,
     perks: [
@@ -27,6 +32,7 @@ const plans = [
   },
 ];
 
+
 /**
  * In your real app, the "Unlock with Razorpay" button would:
  * 1. Call your Express API to create a Razorpay order.
@@ -35,8 +41,15 @@ const plans = [
  *    and mark the logged-in user as "isPro" in MongoDB.
  */
 const PricingAccess = ({ isGray }) => {
+  const { userData } = useSelector((state) => state.user);
+  const onClose=()=>{}
+    const {
+    handlePayment,
+    loadingPlan
+  } = useHandleRazorpayPayment({ onClose });
   return (
     <section id="pricing" className="px-4 py-20 sm:px-6 lg:px-8">
+      <CommonLoader show={loadingPlan} />
       <div className="mx-auto max-w-5xl text-center">
         <span className={`font-mono text-xs uppercase tracking-widest text-(--accent-color1)`}>
           04 / Unlock Access
@@ -101,16 +114,21 @@ const PricingAccess = ({ isGray }) => {
             </ul>
 
             {plan.highlighted ? (
-              <button
-                className={`mt-7 flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 ${
-                  isGray
-                    ? "bg-gradient-to-r from-cyan-500 to-violet-600"
-                    : "bg-gradient-to-r from-indigo-600 to-fuchsia-600"
+              <>
+             
+              {userData && userData.hasProAccess ? null : (
+                <button
+                  onClick={() => plan.id === "pro" ? handlePayment({ ...plan, featureId: "pro" }) : null}
+                  className={`mt-7 flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 ${
+                    isGray
+                      ? "bg-gradient-to-r from-cyan-500 to-violet-600"
+                      : "bg-gradient-to-r from-indigo-600 to-fuchsia-600"
                 }`}
               >
                 <CreditCard size={16} />
                 Unlock with Razorpay
-              </button>
+              </button>)}
+               </>
             ) : (
               <a
                 href="#features"

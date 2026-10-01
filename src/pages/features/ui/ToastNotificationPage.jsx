@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { Bell, Code2, Layers, MonitorSmartphone, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { Bell, Layers, MonitorSmartphone, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 
@@ -8,6 +8,7 @@ import Footer from "../../../components/common/Footer";
 
 import CodeAccessModal from "../../../components/common/CodeAccessModal";
 import CodeBlock from "../../../components/common/CodeBlock";
+import CodeLockUnlockBtn from "../../../components/common/CodeLockUnlockBtn";
 import Navbar from "../../../components/common/Navbar";
 import toastCode from "../../../components/features/ui/toast/ToastCode.jsx?raw";
 import ToastDemo from "../../../components/features/ui/toast/ToastDemo";
@@ -15,9 +16,18 @@ import ToastDemo from "../../../components/features/ui/toast/ToastDemo";
 const useCases = ["Form submission feedback", "API error alerts", "Copy-to-clipboard confirm", "Background task updates"];
 
 const ToastNotificationPage = () => {
-  const isGray = useSelector((state) => state.user.isGray);
+  const { isGray, featuresAccess,userData } = useSelector((state) => state.user);
   const [unlocked, setUnlocked] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const featureId = "toast-notifications";
+
+  useEffect(()=>{
+    if(userData && userData.hasProAccess){
+      setUnlocked(true)
+    }else if(featuresAccess){
+      setUnlocked(featuresAccess[featureId])
+    }
+  },[featuresAccess,userData])
 
   return (
     <div
@@ -51,17 +61,7 @@ const ToastNotificationPage = () => {
             </div>
           </div>
 
-          <button
-            onClick={() => setModalOpen(true)}
-            className={`flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 ${
-              isGray
-                ? "bg-gradient-to-r from-cyan-500 to-violet-600"
-                : "bg-gradient-to-r from-indigo-600 to-fuchsia-600"
-            }`}
-          >
-            <Code2 size={16} />
-            {unlocked ? "✓ Code Unlocked" : "Get Code"}
-          </button>
+<CodeLockUnlockBtn unlocked={unlocked} setModalOpen={setModalOpen} />
         </div>
 
         {/* definition */}
@@ -169,6 +169,7 @@ const ToastNotificationPage = () => {
         onClose={() => setModalOpen(false)}
         isGray={isGray}
         featureName="Toast Notifications"
+        featureId={featureId}
         onSelectPlan={() => setUnlocked(true)}
       />
     </div>

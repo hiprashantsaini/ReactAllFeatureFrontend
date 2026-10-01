@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import { ChevronsRight, Code2, Map, Sparkles, MonitorSmartphone } from "lucide-react";
+import { ChevronsRight, Code2, Map, MonitorSmartphone, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
-import Navbar from "../../components/home/Navbar";
-import Footer from "../../components/home/Footer";
-import PageBreadcrumb from "../../components/shared/PageBreadcrumb";
-import CodeBlock from "../../components/shared/CodeBlock";
-import CodeAccessModal from "../../components/shared/CodeAccessModal";
 import BreadcrumbDemo from "../../components/features/breadcrumb/BreadcrumbDemo";
+import Footer from "../../components/home/Footer";
+import Navbar from "../../components/home/Navbar";
+import CodeAccessModal from "../../components/shared/CodeAccessModal";
+import CodeBlock from "../../components/shared/CodeBlock";
+import PageBreadcrumb from "../../components/shared/PageBreadcrumb";
 
 const useCases = ["E-commerce category pages", "Admin dashboards", "Documentation sites", "File explorers"];
 

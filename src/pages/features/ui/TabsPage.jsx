@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
-import { Code2, Layers, LayoutPanelTop, MonitorSmartphone, Sparkles } from "lucide-react";
+import { Layers, LayoutPanelTop, MonitorSmartphone, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CodeAccessModal from "../../../components/common/CodeAccessModal";
 import CodeBlock from "../../../components/common/CodeBlock";
+import CodeLockUnlockBtn from "../../../components/common/CodeLockUnlockBtn";
 import Footer from "../../../components/common/Footer";
 import Navbar from "../../../components/common/Navbar";
 import TabsDemo from "../../../components/features/ui/tabs/TabsDemo";
@@ -125,16 +126,18 @@ const Tabs = () => {
 export default Tabs;`;
 
 const TabsPage = () => {
-  const { isGray, featuresAccess } = useSelector((state) => state.user);
+  const { isGray, featuresAccess, userData } = useSelector((state) => state.user);
   const [unlocked, setUnlocked] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const featureId = "tabs";
 
-  useEffect(() => {
-    if (featuresAccess) {
+  useEffect(()=>{
+    if(userData && userData.hasProAccess){
+      setUnlocked(true)
+    }else if(featuresAccess){
       setUnlocked(featuresAccess[featureId])
     }
-  }, [featuresAccess])
+  },[featuresAccess,userData])
 
   return (
     <div
@@ -167,16 +170,7 @@ const TabsPage = () => {
             </div>
           </div>
 
-          <button
-            onClick={() => setModalOpen(true)}
-            className={`flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 ${isGray
-                ? "bg-gradient-to-r from-cyan-500 to-violet-600"
-                : "bg-gradient-to-r from-indigo-600 to-fuchsia-600"
-              }`}
-          >
-            <Code2 size={16} />
-            {unlocked ? "Code Unlocked" : "Get Code"}
-          </button>
+          <CodeLockUnlockBtn unlocked={unlocked} setModalOpen={setModalOpen} />
         </div>
 
         {/* definition */}

@@ -30,7 +30,7 @@ const RouteNavigationDocs = () => {
   const { headingRef } = useOutletContext();
 
   return (
-    <section className="px-4 py-12 sm:px-6 lg:px-8 border">
+    <section className="px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
         <div className="mb-10">
           <span className="font-mono text-xs uppercase tracking-widest text-(--accent-color1)">

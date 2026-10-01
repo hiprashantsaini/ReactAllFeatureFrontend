@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Moon, Sparkles, Sun, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 
 /**
  * Navbar
@@ -12,16 +12,79 @@ import { Link } from "react-router-dom";
  *   In your real store, a "user" reducer would flip `isGray` on this action.
  */
 const navLinks = [
-  { label: "Home", to: "/" },
-  { label: "Features", to: "#features" },
-  { label: "How it works", to: "#how-it-works" },
-  { label: "Pricing", to: "#pricing" },
+  // { label: "Home", to: "/" },
+  { label: "Features", to: "/#features" },
+  { label: "How it works", to: "/#how-it-works" },
+  { label: "Pricing", to: "/#pricing" },
 ];
 
 const Navbar = ({ isGray }) => {
   const [open, setOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
   const dispatch = useDispatch();
   const { userData } = useSelector((state) => state.user);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const sections = navLinks
+      .filter((link) => link.to.startsWith("#"))
+      .map((link) => document.querySelector(link.to))
+      .filter(Boolean);
+
+    if (sections.length === 0) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleSections = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+        if (visibleSections.length > 0) {
+          setActiveSection(`#${visibleSections[0].target.id}`);
+        }
+      },
+      { rootMargin: "-80px 0px -65% 0px", threshold: 0 },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [pathname]);
+
+  // const scrollToSection = (event, target) => {
+  //   event.preventDefault();
+  //   const section = document.querySelector(target);
+
+  //   if (section) {
+  //     section.scrollIntoView({ behavior: "smooth", block: "start" });
+  //     setActiveSection(target);
+  //   }
+
+  //   setOpen(false);
+  // };
+
+  const sectionLinkClass = (isActive, isMobile = false) =>
+    `text-sm font-medium transition-colors ${isMobile ? "w-fit border-l-2 pl-3" : "border-b-2"} ${isActive
+      ? isGray
+        ? "text-cyan-400 border-cyan-400"
+        : "text-indigo-600 border-indigo-600"
+      : `border-transparent text-(--secondary-text) ${isGray
+        ? "hover:text-cyan-400"
+        : "hover:text-indigo-600"
+      }`
+    }`;
+
+  const routeLinkClass = ({ isActive }) =>
+    `text-sm font-medium transition-colors ${isActive
+      ? isGray
+        ? "text-cyan-400 border-b-2 border-cyan-400"
+        : "text-indigo-600 border-b-2 border-indigo-600"
+      : `text-(--secondary-text) ${isGray
+        ? "hover:text-cyan-400"
+        : "hover:text-indigo-600"
+      }`
+    }`;
 
   const toggleTheme = () => {
     // Beginner-friendly inline dispatch — no separate action file needed.
@@ -41,13 +104,19 @@ const Navbar = ({ isGray }) => {
 
         {/* Desktop links */}
         <ul className="hidden items-center gap-8 md:flex">
+          <NavLink
+            to="/"
+            className={routeLinkClass}
+          >
+            Home
+          </NavLink>
           {navLinks.map((link) => (
             <li key={link.label}>
               <Link
                 to={link.to}
-                className={`text-sm font-medium transition-colors text-(--secondary-text) ${isGray
-                  ? " hover:text-cyan-400"
-                  : " hover:text-indigo-600"
+                className={`text-(--secondary-text) ${isGray
+                  ? "hover:text-cyan-400"
+                  : "hover:text-indigo-600"
                   }`}
               >
                 {link.label}
@@ -70,28 +139,44 @@ const Navbar = ({ isGray }) => {
             {isGray ? <Sun size={16} /> : <Moon size={16} />}
           </button>
 
-          {userData ? <Link
-            to={"/profile"}
-            className={`text-sm font-medium transition-colors text-(--secondary-text) ${isGray
-              ? " hover:text-cyan-400"
-              : " hover:text-indigo-600"
-              }`}
-          >
-            Profile
-          </Link> : (
-            <Link
-              to={"/auth"}
-              className={`text-sm font-medium text-(--secondary-text) transition-colors ${isGray
-                ? "hover:text-cyan-400"
-                : "hover:text-indigo-600"
-                }`}
+          {userData ? (
+            <NavLink
+              to="/profile"
+              className={({ isActive }) =>
+                `text-sm font-medium transition-all duration-300 ${isActive
+                  ? isGray
+                    ? "text-cyan-400 border-b-2 border-cyan-400"
+                    : "text-indigo-600 border-b-2 border-indigo-600"
+                  : `text-(--secondary-text) ${isGray
+                    ? "hover:text-cyan-400"
+                    : "hover:text-indigo-600"
+                  }`
+                }`
+              }
+            >
+              Profile
+            </NavLink>
+          ) : (
+            <NavLink
+              to="/auth"
+              className={({ isActive }) =>
+                `text-sm font-medium transition-all duration-300 ${isActive
+                  ? isGray
+                    ? "text-cyan-400 border-b-2 border-cyan-400"
+                    : "text-indigo-600 border-b-2 border-indigo-600"
+                  : `text-(--secondary-text) ${isGray
+                    ? "hover:text-cyan-400"
+                    : "hover:text-indigo-600"
+                  }`
+                }`
+              }
             >
               Login
-            </Link>
+            </NavLink>
           )}
 
-          <a
-            href="#pricing"
+        {userData?.hasProAccess ? null : ( <a
+            href="/#pricing"
             className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 ${isGray
               ? "bg-gradient-to-r from-cyan-500 to-violet-600 shadow-cyan-900/40"
               : "bg-gradient-to-r from-indigo-600 to-fuchsia-600 shadow-indigo-300/50"
@@ -99,7 +184,7 @@ const Navbar = ({ isGray }) => {
           >
             <Sparkles size={15} />
             Get Access
-          </a>
+          </a>)}
         </div>
 
         {/* Mobile toggle */}
@@ -122,23 +207,33 @@ const Navbar = ({ isGray }) => {
             className={`md:hidden border-t border-(--primary-border) bg-(--secondary-bg)`}
           >
             <div className="flex flex-col gap-4 px-6 py-5">
+              <NavLink
+                to="/"
+                onClick={() => setOpen(false)}
+                className={routeLinkClass}
+              >
+                Home
+              </NavLink>
               {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.to}
+                <Link
+                  to={link.to}
                   onClick={() => setOpen(false)}
-                  className={`text-sm font-medium text-(--secondary-text)`}
+                  className={`text-(--secondary-text) ${isGray
+                    ? "hover:text-cyan-400"
+                    : "hover:text-indigo-600"
+                    }`}
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
 
-              <Link
-                to={"/profile"}
-                className={`text-sm font-medium transition-colors text-(--secondary-text) hover:text-(--accent-color1)`}
+              <NavLink
+                to="/profile"
+                onClick={() => setOpen(false)}
+                className={routeLinkClass}
               >
                 Profile
-              </Link>
+              </NavLink>
               <button
                 onClick={toggleTheme}
                 className={`flex items-center gap-2 text-sm font-medium text-(--accent-color4)`}
@@ -146,7 +241,7 @@ const Navbar = ({ isGray }) => {
                 {isGray ? <Sun size={16} /> : <Moon size={16} />}
                 Switch theme
               </button>
-              <a
+             {userData?.hasProAccess ? null : ( <a
                 href="#pricing"
                 className={`mt-1 rounded-full px-4 py-2 text-center text-sm font-semibold text-white ${isGray
                   ? "bg-gradient-to-r from-cyan-500 to-violet-600"
@@ -154,7 +249,7 @@ const Navbar = ({ isGray }) => {
                   }`}
               >
                 Get Access
-              </a>
+              </a>)}
             </div>
           </motion.div>
         )}
