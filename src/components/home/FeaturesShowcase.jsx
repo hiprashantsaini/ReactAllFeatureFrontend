@@ -115,7 +115,7 @@ const docsCards = [
     icon: Code2,
     title: "React Docs",
     tag: "Frontend",
-    path: "/",
+    // path: "/",
     description:
       "Core React patterns, component architecture, hooks, and app structure examples for modern frontends.",
   },

@@ -13,11 +13,20 @@ const plans = [
       { text: "View every feature page live", included: true },
       { text: "Read partial / preview code", included: true },
       { text: "Full source code download", included: false },
-      { text: "Private GitHub repo access", included: false },
+      // { text: "Private GitHub repo access", included: false },
     ],
   },
+   {
+    id: "single",
+    name: "Single Feature Only",
+    note: "Payment for required feature",
+    price: "₹9",
+    amount: 900,
+    desc: "Unlock just this page's code",
+    perks: [{text:"Full source code",included:true}, {text: "Full copy-paste source for that feature",included:true},  { text: "Lifetime free future updates", included: true }],
+  },
   {
-    id:"pro",
+    id: "pro",
     name: "Pro Access",
     price: "₹499",
     amount: 49900,
@@ -26,7 +35,7 @@ const plans = [
     perks: [
       { text: "View every feature page live", included: true },
       { text: "Full copy-paste source for all pages", included: true },
-      { text: "Private GitHub repo access", included: true },
+      // { text: "Private GitHub repo access", included: true },
       { text: "Lifetime free future updates", included: true },
     ],
   },
@@ -42,8 +51,8 @@ const plans = [
  */
 const PricingAccess = ({ isGray }) => {
   const { userData } = useSelector((state) => state.user);
-  const onClose=()=>{}
-    const {
+  const onClose = () => { }
+  const {
     handlePayment,
     loadingPlan
   } = useHandleRazorpayPayment({ onClose });
@@ -62,7 +71,7 @@ const PricingAccess = ({ isGray }) => {
         </p>
       </div>
 
-      <div className="mx-auto mt-12 grid max-w-3xl gap-6 sm:grid-cols-2">
+      <div className="mx-auto mt-12 grid max-w-4xl gap-6 sm:grid-cols-3">
         {plans.map((plan, i) => (
           <motion.div
             key={plan.name}
@@ -70,21 +79,19 @@ const PricingAccess = ({ isGray }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45, delay: i * 0.1 }}
-            className={`relative rounded-3xl border p-7 ${
-              plan.highlighted
+            className={`relative rounded-3xl border p-7 ${plan.highlighted
                 ? isGray
                   ? "border-cyan-700 bg-slate-900 shadow-2xl shadow-cyan-900/30"
                   : "border-indigo-300 bg-white shadow-2xl shadow-indigo-200/60"
                 : "border-(--primary-border) bg-(--primary-bg)"
-            }`}
+              }`}
           >
             {plan.highlighted && (
               <span
-                className={`absolute -top-3 right-7 rounded-full px-3 py-1 text-xs font-semibold text-white ${
-                  isGray
+                className={`absolute -top-3 right-7 rounded-full px-3 py-1 text-xs font-semibold text-white ${isGray
                     ? "bg-gradient-to-r from-cyan-500 to-violet-600"
                     : "bg-gradient-to-r from-indigo-600 to-fuchsia-600"
-                }`}
+                  }`}
               >
                 Most popular
               </span>
@@ -115,26 +122,25 @@ const PricingAccess = ({ isGray }) => {
 
             {plan.highlighted ? (
               <>
-             
-              {userData && userData.hasProAccess ? null : (
-                <button
-                  onClick={() => plan.id === "pro" ? handlePayment({ ...plan, featureId: "pro" }) : null}
-                  className={`mt-7 flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 ${
-                    isGray
-                      ? "bg-gradient-to-r from-cyan-500 to-violet-600"
-                      : "bg-gradient-to-r from-indigo-600 to-fuchsia-600"
-                }`}
-              >
-                <CreditCard size={16} />
-                Unlock with Razorpay
-              </button>)}
-               </>
+
+                {userData && userData.hasProAccess ? null : (
+                  <button
+                    onClick={() => plan.id === "pro" ? handlePayment({ ...plan, featureId: "pro" }) : null}
+                    className={`mt-7 flex w-full items-center justify-center gap-2 cursor-pointer rounded-full px-5 py-3 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 ${isGray
+                        ? "bg-gradient-to-r from-cyan-500 to-violet-600"
+                        : "bg-gradient-to-r from-indigo-600 to-fuchsia-600"
+                      }`}
+                  >
+                    <CreditCard size={16} />
+                    Unlock with Razorpay
+                  </button>)}
+              </>
             ) : (
               <a
                 href="#features"
                 className={`mt-7 flex w-full border-(--primary-border) text-(--primary-text) items-center justify-center rounded-full border px-5 py-3 text-sm font-semibold}`}
               >
-                Keep browsing free
+               {plan.id === 'single' ? ((userData && userData.hasProAccess) ? "Browse feature" : "Unlock required feature") :  "Keep browsing free"}
               </a>
             )}
           </motion.div>

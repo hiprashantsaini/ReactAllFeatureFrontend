@@ -175,7 +175,7 @@ const Navbar = ({ isGray }) => {
             </NavLink>
           )}
 
-        {userData?.hasProAccess ? null : ( <a
+          {userData?.hasProAccess ? null : (<a
             href="/#pricing"
             className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 ${isGray
               ? "bg-gradient-to-r from-cyan-500 to-violet-600 shadow-cyan-900/40"
@@ -226,14 +226,41 @@ const Navbar = ({ isGray }) => {
                   {link.label}
                 </Link>
               ))}
-
-              <NavLink
-                to="/profile"
-                onClick={() => setOpen(false)}
-                className={routeLinkClass}
-              >
-                Profile
-              </NavLink>
+              {userData ? (
+                <NavLink
+                  to="/profile"
+                  className={({ isActive }) =>
+                    `text-sm font-medium transition-all duration-300 ${isActive
+                      ? isGray
+                        ? "text-cyan-400 border-b-2 border-cyan-400"
+                        : "text-indigo-600 border-b-2 border-indigo-600"
+                      : `text-(--secondary-text) ${isGray
+                        ? "hover:text-cyan-400"
+                        : "hover:text-indigo-600"
+                      }`
+                    }`
+                  }
+                >
+                  Profile
+                </NavLink>
+              ) : (
+                <NavLink
+                  to="/auth"
+                  className={({ isActive }) =>
+                    `text-sm font-medium transition-all duration-300 ${isActive
+                      ? isGray
+                        ? "text-cyan-400 border-b-2 border-cyan-400"
+                        : "text-indigo-600 border-b-2 border-indigo-600"
+                      : `text-(--secondary-text) ${isGray
+                        ? "hover:text-cyan-400"
+                        : "hover:text-indigo-600"
+                      }`
+                    }`
+                  }
+                >
+                  Login
+                </NavLink>
+              )}
               <button
                 onClick={toggleTheme}
                 className={`flex items-center gap-2 text-sm font-medium text-(--accent-color4)`}
@@ -241,7 +268,7 @@ const Navbar = ({ isGray }) => {
                 {isGray ? <Sun size={16} /> : <Moon size={16} />}
                 Switch theme
               </button>
-             {userData?.hasProAccess ? null : ( <a
+              {userData?.hasProAccess ? null : (<a
                 href="#pricing"
                 className={`mt-1 rounded-full px-4 py-2 text-center text-sm font-semibold text-white ${isGray
                   ? "bg-gradient-to-r from-cyan-500 to-violet-600"

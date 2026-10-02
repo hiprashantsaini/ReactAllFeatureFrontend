@@ -351,14 +351,14 @@ const AuthCard = ({ isGray }) => {
           />
           <button
             onClick={() => switchMode("login")}
-            className={`relative z-10 rounded-full py-2 text-sm font-semibold transition-colors ${mode === "login" ? "text-white" : isGray ? "text-slate-400" : "text-slate-500"
+            className={`relative z-10 rounded-full cursor-pointer py-2 text-sm font-semibold transition-colors ${mode === "login" ? "text-white" : isGray ? "text-slate-400" : "text-slate-500"
               }`}
           >
             Log In
           </button>
           <button
             onClick={() => switchMode("signup")}
-            className={`relative z-10 rounded-full py-2 text-sm font-semibold transition-colors ${mode === "signup" ? "text-white" : isGray ? "text-slate-400" : "text-slate-500"
+            className={`relative z-10 rounded-full cursor-pointer py-2 text-sm font-semibold transition-colors ${mode === "signup" ? "text-white" : isGray ? "text-slate-400" : "text-slate-500"
               }`}
           >
             Sign Up

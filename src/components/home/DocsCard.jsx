@@ -1,10 +1,13 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import ComingSoonModal from "../common/ComingSoonModal";
 
 const DocsCard = ({ icon: Icon, title, description, tag, path, index = 0 }) => {
+    const [show, setShow] = useState(false);
   return (
-    <Link to={path} className="group block">
+    <Link to={path} onClick={()=>path ? null : setShow(true)} className="group block">
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -14,7 +17,7 @@ const DocsCard = ({ icon: Icon, title, description, tag, path, index = 0 }) => {
         className="relative overflow-hidden rounded-3xl border border-(--primary-border) bg-(--secondary-bg) p-5 shadow-sm transition-all hover:border-(--primary-hover-border) hover:shadow-xl hover:shadow-indigo-100/30"
       >
         <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-(--accent-color1)/10 blur-2xl transition-opacity group-hover:opacity-100 opacity-60" />
-
+     <ComingSoonModal show={show} onClose={() => setShow(false)} description="React documents are about to be ready. Check back soon!" />
         <div className="relative flex items-start justify-between gap-3">
           <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-(--primary-bg) text-(--accent-color1) ring-1 ring-(--primary-border)">
             <Icon size={18} />
